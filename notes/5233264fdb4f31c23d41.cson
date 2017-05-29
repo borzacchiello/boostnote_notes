@@ -1,0 +1,84 @@
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "Unix Shell Commands"
+content: '''
+  # Unix Shell Commands
+  ### Basic commands
+  `ls`: shows the content of current directory. Common options 
+    - `-l` long format
+    - `-a` display files which start with dot (.) (hidden files)
+  
+  `pwd`: present working directory, show the path of the current directory
+  `cd path`: change directory to path
+  `cat file`: print the file on stdout, if more files are secified, then their content is cocatenated
+  `echo "string"`: print on stdout the string. Common options:
+    - `-n` do not print newline after the string
+  
+  `grep "regular-expression" fiename`: print on stdout the lines which match the regular expression. Common options
+    - `-o` print only match, no context
+    - `-h` do not print filename
+  
+  `cmd | tee file`: duplicate the output of cmd writing it both on screen (stdout) and on file
+  `man command`: show the documentation for the command
+  `mkdir path/dir`: create the directory dir in path
+  `cp path1/f1 path2`: copy f1 to path2
+  `mv path1/f1 path2`: move f1 to path2, used also to rename a file
+  `rm file`: delete file, with -r delete a directory (and its content!)
+  `touch path/filename`: create a file in path (or check for the existence of the file)
+  `wc file`: print info about the file. Common options
+    - `-l` print the number of lines
+    - `-w` print the number of words
+  
+  `ln path1/origin path2/destination`: create an hard-link (soft-link with option -s) of file origin with name destination. An hard link will persist even if the origin is deleted, a soft link will not
+  `sort namefile`: print on stdout the content of namefile with each lines in alphabetical order
+  `find path -name filename`: find in path the file filename (also metacharacters allowed, such as \\* or .)
+  `cal`: print the calendar
+  `who`: info about the current shell
+  `whoami`: my name
+  `uname -a`: info about the machine
+  
+  ---
+  ##### tr
+  Useful command to manipulate strings (translate or delete characters).
+  `tr ' ' ';'` transform each space with a semicolon. The input is either given with stdin but can be redirected with a pipe `|` or a file redirect `<`
+  `tr -s ','` delete all the occurences of the comma.
+  ##### cut
+  Print selected parts of lines from each file in input to stdout. Common options:
+    - `-d` select the delimiter (if not set, the default delim is TAB)
+    - `-f` choose the field between delimiters
+    - `-s` print only the lines which have a delimiter
+    - `-c` select only the characters listed (no delimiter, no fields!)
+  
+  ex
+  `echo "ciao,ciao,bambina" | cut -d ',' -f1,3` prints *ciao,bambina*
+  `echo "abcdef" | cut -c1,5` prints *ae*
+  
+  ---
+  
+  ##### pipe
+  Used to pass values between programs. `cmd1 | cmd2` will execute cmd1 and will pass the output of cmd1 as input to cmd2.
+  
+  ##### redirection
+  Used to redirect output of a command to file or to take a file as stdin.
+  ex
+  `echo "ciao" > file` prints ciao in file
+  `echo "ciao" >> file` appends ciao in file
+  `find / -name "*.desktop" 2> /dev/null` prints on screen the result of find but redirect stderr to /dev/null
+  `grep * 1>&2` redirect stdout to stderr
+  `grep * &> file` redirect both stderr and stdout to file
+  `cat 0>&1` redirect stdin to stdout (an echo! every string is duplicated)
+  `grep ciao < file` execute grep on file
+  
+  ##### back quotes
+  A command wrapped in back quotes will be precomputed before executing the whole command
+  ex
+  ``echo `ls -l` `` will print the content of pwd
+'''
+tags: [
+  "shell"
+  "commands"
+  "unix"
+]
+isStarred: false
+createdAt: "2017-05-29T20:57:36.984Z"
+updatedAt: "2017-05-29T22:20:38.852Z"
