@@ -35,6 +35,8 @@ content: '''
   `ln path1/origin path2/destination`: create an hard-link (soft-link with option -s) of file origin with name destination. An hard link will persist even if the origin is deleted, a soft link will not
   `sort namefile`: print on stdout the content of namefile with each lines in alphabetical order
   `find path -name filename`: find in path the file filename (also metacharacters allowed, such as \\* or .)
+  `file filename`: info about filename
+  `du filename`: estimate space usage of filename
   `cal`: print the calendar
   `who`: info about the current shell
   `whoami`: my name
@@ -108,4 +110,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2017-05-30T21:53:23.494Z"
+updatedAt: "2017-05-30T22:01:01.598Z"
