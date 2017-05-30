@@ -1,0 +1,28 @@
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "Regular expressions"
+content: '''
+  # Regular expressions
+  
+  Regular expressions are really useful because many unix commands use them (ex grep). 
+  - `^`: the beginning of the line. `ls -al | grep ^d` will grep all lines which begin with the character 'd' i.e. the directories
+  - `$`: the end of the line. `ls -al | grep e$` will grep all the lines which terminate with the character 'e'.
+  - `.`: represent a single character. `grep .ino` will match Nino, Pino, Gino etc.
+  - `c*`: represent a possibly empty, arbitrary number of occurrences of the character `c`. `grep 'smart *card'` will match `smartcard`,`smart card`, `smart  card`, ... . Note: `.*` will match an arbitrary number of arbitrary characters!
+  - `c\\+`: as before but the sequence of `c` cannot be empty. `grep 'smart \\+card` will not match with `smartcard`.
+  - `c\\?`: zero or one occurrences of `c`.
+  - `[1234]`: represent one character between the ones listed inside the square brackets (in this example 1, 2, 3 or 4. It is possible to use `-` to indicate a range. `grep '[0-9]\\+'` will match with an arbitrary number of digits (at least one).
+  - `[^0-9]`: the `^` character inside square brackets have a different meaning, it will stand as a negation: all characters but the ones listed. `grep [^0-9]\\+` will grep all strings with at least one character which is not a digit. `grep '^[^0-9]*$'` will grep al strings which don't contain digits.
+  - `[:alnum:]` `[:blank:]`: prefefined set of characters (alphanumerics and spaces).
+  
+  **note**: a special character such as `*` can be found by prepending a backslash before it `\\` (to change its default meaning).
+  
+'''
+tags: [
+  "regular"
+  "expression"
+  "shell"
+]
+isStarred: false
+createdAt: "2017-05-30T17:39:42.902Z"
+updatedAt: "2017-05-30T20:43:04.191Z"

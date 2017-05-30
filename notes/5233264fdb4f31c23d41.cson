@@ -13,7 +13,10 @@ content: '''
   `cat file`: print the file on stdout, if more files are secified, then their content is cocatenated
   `echo "string"`: print on stdout the string. Common options:
     - `-n` do not print newline after the string
+    - `-e` accept special characters such as \\n
   
+  `diff file1 file2` show differences between file1 and file2
+  `git diff file1 file2` similar as before
   `grep "regular-expression" fiename`: print on stdout the lines which match the regular expression. Common options
     - `-o` print only match, no context
     - `-h` do not print filenames
@@ -52,6 +55,28 @@ content: '''
   ex
   `echo "ciao,ciao,bambina" | cut -d ',' -f1,3` prints *ciao,bambina*
   `echo "abcdef" | cut -c1,5` prints *ae*
+  ##### sed
+  It is a very powerful tool for text transformation. The transformation will be applied in sequence and are divided by a semicolon `;`. By default sed will print the result after _all_ commands are executed. If we want to not print by defaut, we can use the flag `n`.
+  ex
+  `sed '1d' filename` delete the first line of filename
+  `sed '1,3d' filename` delete the first and the third line of filename
+  `sed -n '1p' filename` print the first line of filename. Note that `-n` is reqired! without that, sed will print _every_ line of the file but the first line, which is printed twice.
+  `sed 's/dino/mino/' filename` delete the _first_ occurrence of dino in mino. To delete _all_ he occurrence we can add a `g` at the end of the command. If we add `i` the substitution is case insensitive, if we add a number, we will substitute only the first n occurrences.
+  `sed 's/dino/mino/g`
+  `sed 's/dino/mino/i3'`
+  `sed -n '/dino/p' filename` print the lines which contain dino
+  `sed '/dino/d' filename` delete the lines which contain dino
+  `sed '6,7s/dino/mino/' filename` substitute dino with mino at 6th and 7th rows
+  `sed 's/fox/coati/;s/dog/dingo/' filename` substitute fox with coati and dog with dingo
+  `sed -n 's/fox/coat/;p;s/dog/dingo/' filename` substitute _only_ fox with coat! due to `-n` and the lack of `p` at the end, the second transformation will not be printed
+  `sed -n 's/fox/coat/;p;s/dog/dingo/;p' filename` as before, but prints each line twice! one with the first substitution and the second with both substitutions
+  `sed -n 's/fox/coat/;s/dog/dingo/;p' filename` print with both substitutions (as the one without `-n`
+  
+  _note_ sed supports regular expressions!
+  
+  `sed 's/Dear \\([^ ]*\\) .*$/Name = \\1/g'` substitute Dear _somename_ with Name = _somename_. Note that it is possible to refer to a matched substring with `\\1` when it is sorrounded by brackets `()`, if we have more blocks, than we can refer to blocks with `\\2`, `\\3`, ...
+  `sed 's/world/hello &/g'` with `&` we can perform find-and-replace. The example will add hello just before world! (`&` refers to the matched substring).
+  `sed 's/\\(world\\)/hello \\1/g'` is absolutely equivalent to the previous one.
   
   ---
   
@@ -81,4 +106,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2017-05-30T07:24:03.020Z"
+updatedAt: "2017-05-30T21:25:01.917Z"
