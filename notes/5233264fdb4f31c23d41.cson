@@ -16,7 +16,7 @@ content: '''
   
   `grep "regular-expression" fiename`: print on stdout the lines which match the regular expression. Common options
     - `-o` print only match, no context
-    - `-h` do not print filename
+    - `-h` do not print filenames
   
   `cmd | tee file`: duplicate the output of cmd writing it both on screen (stdout) and on file
   `man command`: show the documentation for the command
@@ -81,4 +81,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2017-05-29T22:20:38.852Z"
+updatedAt: "2017-05-30T07:24:03.020Z"
