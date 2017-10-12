@@ -1,0 +1,27 @@
+type: "MARKDOWN_NOTE"
+folder: "d5841d5890db3062d38d"
+title: "common opcodes"
+content: '''
+  # common opcodes
+  
+  - `jmp AA` -> EB AA(addres di 8bit)
+  NOTA: l'address è calcolato a partire dall'istruzione successiva alla jump (2 byte dopo)
+  - `jz AA` -> 74 AA
+  - `jnz AA` -> 75 AA
+  - `nop` -> 90
+  
+  ###### jump obbligato x86
+  ```
+  cmp eax, eax // 39 C0
+  je LOC // 75 LOC
+  ```
+  ###### jump obbligato x86_64
+  ```
+  cmp rax, rax // 48 39 C0
+  je LOC // 75 LOC
+  ```
+'''
+tags: []
+isStarred: false
+createdAt: "2017-10-12T22:24:25.526Z"
+updatedAt: "2017-10-12T22:28:12.495Z"

@@ -1,0 +1,108 @@
+type: "SNIPPET_NOTE"
+folder: "799dbc72e6ed588d562c"
+title: "WordCount"
+description: "WordCount"
+snippets: [
+  {
+    name: "WordCount.java"
+    mode: "Java"
+    content: '''
+      import java.io.IOException;
+      import java.util.Scanner;
+      
+      import org.apache.hadoop.conf.Configuration;
+      import org.apache.hadoop.fs.Path;
+      import org.apache.hadoop.io.IntWritable;
+      import org.apache.hadoop.io.LongWritable;
+      import org.apache.hadoop.io.Text;
+      import org.apache.hadoop.mapreduce.Job;
+      import org.apache.hadoop.mapreduce.Mapper;
+      import org.apache.hadoop.mapreduce.Reducer;
+      import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+      import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+      import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+      
+      
+      public class WordCount {
+      
+      	public static void main(String[] args) throws Exception {
+              Job job = Job.getInstance(new Configuration());
+          
+              job.setJarByClass(WordCount.class);
+          
+              job.setJobName("WordCount");
+      
+              FileInputFormat.addInputPath(job, new Path(args[0]));
+              FileOutputFormat.setOutputPath(job, new Path(args[1]));
+      
+              job.setMapperClass(MyMapper.class);
+              job.setReducerClass(MyReducer.class);
+      
+              job.setInputFormatClass(TextInputFormat.class);
+              job.setOutputKeyClass(Text.class);
+              job.setOutputValueClass(IntWritable.class);
+      
+              job.waitForCompletion(true);
+      	}
+      
+      	public static class MyMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+      
+      		@Override
+      		protected void map(LongWritable key, Text value, Context context)
+      				throws IOException, InterruptedException {
+      
+      			Scanner s = new Scanner(value.toString());
+      			s.useDelimiter("\\\\W");
+            
+      			while (s.hasNext()) {
+                      String word = s.next().toLowerCase();
+      				context.write(new Text(word), new IntWritable(1));
+                  }
+              }
+      	}
+      
+      	public static class MyReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+      
+      		@Override
+      		protected void reduce(Text key, Iterable<IntWritable> values, Context context)
+      				throws IOException, InterruptedException {
+                  int sum = 0;
+      			for (IntWritable value: values)
+                      sum += value.get();
+      			context.write(key, new IntWritable(sum));
+      		}
+      	}
+      }
+    '''
+  }
+  {
+    name: "Makefile"
+    mode: "Plain Text"
+    content: '''
+      CLASS=WordCount
+      IN=/in.txt
+      OUT=/out
+       
+      all:
+      	javac *.java -cp $(shell hadoop classpath)
+      	jar cf $(CLASS).jar *.class
+       
+      run:
+      	hadoop fs -rm -r -f $(OUT)
+      	yarn jar $(CLASS).jar $(CLASS) $(IN) $(OUT)
+       
+      out:
+      	hadoop fs -cat $(OUT)/part-r-00000 | less
+       
+      clean:
+      	rm *.class *.jar
+      
+    '''
+  }
+]
+tags: [
+  "hadoop"
+]
+isStarred: false
+createdAt: "2017-07-03T18:03:54.565Z"
+updatedAt: "2017-07-03T18:12:10.305Z"

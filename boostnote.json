@@ -4,6 +4,16 @@
       "key": "624499bc0700af893dfe",
       "color": "#FF8E00",
       "name": "Linux"
+    },
+    {
+      "key": "799dbc72e6ed588d562c",
+      "color": "#FF8E00",
+      "name": "Mapreduce"
+    },
+    {
+      "key": "d5841d5890db3062d38d",
+      "color": "#2BA5F7",
+      "name": "ReverseEngineering"
     }
   ],
   "version": "1.0"
