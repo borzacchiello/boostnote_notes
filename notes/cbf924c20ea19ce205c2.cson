@@ -1,0 +1,42 @@
+type: "MARKDOWN_NOTE"
+folder: "98745b0db9cdfd011220"
+title: "operator overloading"
+content: '''
+  # operator overloading
+  
+  ```c++
+    class MyClass {
+    public:
+      int val;
+      ...
+      MyClass & operator=(const MyClass &rhs)
+      ...
+      MyClass & operator+=(const MyClass &rhs)
+      ...
+      MyClass & operator-=(const MyClass &rhs)
+      ...
+      bool operator==(const MyClass& rhs)const 
+      ...
+      MyClass operator++();    // ++obj
+      ...
+      MyClass operator++(int); // obj++
+      ...
+    }
+    
+  MyClass MyClass::operator++() {
+      this->val += 1;
+      return *this;
+  }
+  
+  MyClass MyClass::operator++(int) {
+      MyClass clone = *this;
+      this->val += 1;
+      return clone;
+  }
+  ```
+'''
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-01T08:56:57.383Z"
+updatedAt: "2017-11-01T12:31:31.289Z"

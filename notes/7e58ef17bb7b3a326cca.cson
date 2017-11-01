@@ -15,6 +15,7 @@ snippets: [
           friend ostream& operator<<(ostream& o, const point& p);
         public:
           point(int xx, int yy): x(xx), y(yy) {}
+          ~point() {}
           point operator+(point& that) {                          // first type of overloading
               return point(this->x+that.x, this->y+that.y);
           }
@@ -38,4 +39,4 @@ tags: []
 isStarred: false
 isTrashed: false
 createdAt: "2017-11-01T08:40:17.937Z"
-updatedAt: "2017-11-01T08:40:52.276Z"
+updatedAt: "2017-11-01T11:43:06.380Z"

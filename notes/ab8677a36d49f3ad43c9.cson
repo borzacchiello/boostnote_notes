@@ -15,6 +15,7 @@ snippets: [
           int val;
       
           integer(int val);
+          ~integer() {}
           virtual double to_double();
       };
       
@@ -22,6 +23,7 @@ snippets: [
           double val;
       
           real(double val);
+          ~real() {}
           virtual double to_double();
       };
       
@@ -29,6 +31,7 @@ snippets: [
           int n; int d;
       
           rational(int n, int d);
+          ~rational() {}
           virtual double to_double();
       };
     '''
@@ -100,4 +103,4 @@ tags: []
 isStarred: false
 isTrashed: false
 createdAt: "2017-11-01T08:37:04.483Z"
-updatedAt: "2017-11-01T08:38:03.515Z"
+updatedAt: "2017-11-01T11:43:49.279Z"
