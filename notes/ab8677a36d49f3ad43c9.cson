@@ -1,0 +1,103 @@
+type: "SNIPPET_NOTE"
+folder: "98745b0db9cdfd011220"
+title: "simple class"
+description: "simple class"
+snippets: [
+  {
+    name: "number.hpp"
+    mode: "C++"
+    content: '''
+      struct number { // abstract class
+          virtual double to_double() = 0; //pure virtual method
+      };
+      
+      struct integer : number {
+          int val;
+      
+          integer(int val);
+          virtual double to_double();
+      };
+      
+      struct real : number {
+          double val;
+      
+          real(double val);
+          virtual double to_double();
+      };
+      
+      struct rational : number {
+          int n; int d;
+      
+          rational(int n, int d);
+          virtual double to_double();
+      };
+    '''
+  }
+  {
+    name: "number.cpp"
+    mode: "C++"
+    content: '''
+      #include "number.hpp"
+      
+      integer :: integer(int val) {
+          this->val = val;
+      }
+      
+      double integer :: to_double() {
+          return (double)this->val;
+      }
+      
+      real :: real(double val) {
+          this->val = val;
+      }
+      
+      double real :: to_double() {
+          return this->val;
+      }
+      
+      rational :: rational(int n, int d) {
+          this->n = n;
+          this->d = d;
+      }
+      
+      double rational :: to_double() {
+          return ((double)n)/d;
+      }
+    '''
+  }
+  {
+    name: "main.cpp"
+    mode: "C++"
+    content: '''
+      #include <iostream>
+      #include "number.hpp"
+      
+      double sum(number* r[], int n) {
+          double s = 0;
+          for (int i=0; i<n; i++)
+              s += r[i]->to_double();
+          return s;
+      }
+      
+      int main() {
+          number* r[3];
+          r[0] = new integer(1);
+          r[1] = new real(3.14142);
+          r[2] = new rational(4,5); // 4/5
+      
+          // should print sum=4.94142 (1+3.14142+4/5)
+          std::cout << "sum=" << sum(r, 3) << std::endl;
+      
+          delete r[0];
+          delete r[1];
+          delete r[2];
+          return 0;
+      }
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-01T08:37:04.483Z"
+updatedAt: "2017-11-01T08:38:03.515Z"

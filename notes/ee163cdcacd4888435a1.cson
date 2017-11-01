@@ -1,0 +1,35 @@
+type: "SNIPPET_NOTE"
+folder: "98745b0db9cdfd011220"
+title: "reference type"
+description: "reference type"
+snippets: [
+  {
+    name: "swap.cpp"
+    mode: "C++"
+    content: '''
+      #include <stdio.h>
+      
+      void swap(int& x, int& y) {
+      /*  I'm actually passing parameters
+       *  by refs! Not by copy.
+       */
+          int temp = x;
+          x = y;
+          y = temp;
+      }
+      
+      int main() {
+          int pippo = 10, pluto = 20;
+          swap(pippo, pluto);
+          printf("pippo: %d, pluto: %d\\n", pippo, pluto);
+          return 0;
+      }
+      
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-01T08:38:51.846Z"
+updatedAt: "2017-11-01T08:39:55.370Z"

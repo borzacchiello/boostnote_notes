@@ -1,0 +1,41 @@
+type: "SNIPPET_NOTE"
+folder: "98745b0db9cdfd011220"
+title: "friend method and overloading"
+description: "friend method and overloading"
+snippets: [
+  {
+    name: "point.cpp"
+    mode: "C++"
+    content: '''
+      #include <iostream>
+      using namespace std;
+      
+      class point {
+          int x,y;
+          friend ostream& operator<<(ostream& o, const point& p);
+        public:
+          point(int xx, int yy): x(xx), y(yy) {}
+          point operator+(point& that) {                          // first type of overloading
+              return point(this->x+that.x, this->y+that.y);
+          }
+      };
+      
+      ostream& operator<<(ostream& o, const point& p) {           // second type of overloading
+          o << "(" << p.x << ", " << p.y << ")";
+          return o;
+      }
+      
+      int main(int argc, char const *argv[]) {
+          point p1(1,2), p2(3,4);
+          point p3 = p1 + p2;
+          cout << p1 << " + " << p2 << " = " << p3 << endl;
+          return 0;
+      }
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-01T08:40:17.937Z"
+updatedAt: "2017-11-01T08:40:52.276Z"

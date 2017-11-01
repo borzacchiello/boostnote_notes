@@ -1,0 +1,12 @@
+type: "MARKDOWN_NOTE"
+folder: "d5841d5890db3062d38d"
+title: "spawn TTY shell"
+content: '''
+  # spawn TTY shell
+  `python -c 'import pty; pty.spawn("/bin/sh")'`
+'''
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-10-31T14:39:19.083Z"
+updatedAt: "2017-10-31T14:39:30.103Z"

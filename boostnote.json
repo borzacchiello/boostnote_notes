@@ -19,6 +19,11 @@
       "key": "a70e6c6c246ebd34db24",
       "color": "#B013A4",
       "name": "Python"
+    },
+    {
+      "key": "98745b0db9cdfd011220",
+      "color": "#FF8E00",
+      "name": "c++"
     }
   ],
   "version": "1.0"
