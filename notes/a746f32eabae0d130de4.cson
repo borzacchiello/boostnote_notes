@@ -1,0 +1,54 @@
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "Radare 2"
+content: '''
+  # Radare 2
+  
+  - `s addr`: go to address
+  - `aaa`: analyze the binary
+  - `afl`: list all function
+  - `V`: visual mode
+  - `VV`: visual mode with graph
+  - `pdf@nome_funzione`: disassembla la funzione ([p]rint [d]isassemble [f]unction)
+  - `e asm.syntax = att`: change syntax to att
+  - `e asm.syntax = intel`: change syntax to intel
+  - `c`: enter in character selection mode
+  - `[*where]~[*what]`: grep somewhat from somewhere [no spaces]
+  - `iz`: stampa tutte le stringhe della funzione (o sezione) attuale
+  - `izz`: stampa tutte le stringhe
+  - `r2 -c=H /bin/ls`: interfaccia grafica web
+  - `ag>graph.dot`: CFG della funzione attuale salvato nel file graph.dot
+  - `ga` [g]oto symbol a. salta al codice disassemblato della riga con l'identificatore [a]
+  
+  ##### Debugger mode
+  - enter debugger mode: `r2 -d /path/to/exe`
+  - set breakpoint: `db addr`, note that addr can be also a name of a function (found with afl), ex: `db sys.main`
+  - list breakpoints: `db`
+  - continue until breakpoint: `dc`
+  - enter in visual panel mode: `V!`, tab to change panel, x to close a panel, M to create a new panel, : to type a command
+  - print hexdump of an address: `px len_in_byte @ addr`, addr can be an expression, ex: `ecx + edx*2`
+  - print value at an address: `pv @ addr`
+  - pv can be concatenated (only one backtick): `pv @ ``pv @ ecx`` ` -> print what is in memory at the address in ecx
+  
+  ###### EX
+  ```
+  > r2 -d a.out
+  > aaa
+  > afl
+  ... // list all functions
+  > db loc.myfunction
+  > dc
+  ... // breakpoint hitted
+  > V!
+  ```
+  let's suppose that we have in ecx the address of an array of 20 ints.
+  in visual panel mode: type `M` to create a new panel:
+  - name: array hexdump
+  - command: `px 20*4 @ ecx`
+  this will create a new panel which tracks the value of the array.
+'''
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-08T11:13:55.020Z"
+updatedAt: "2017-11-08T11:28:24.813Z"
