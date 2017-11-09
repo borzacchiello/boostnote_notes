@@ -103,6 +103,17 @@ content: '''
   A command wrapped in back quotes will be precomputed before executing the whole command
   ex
   ``echo `ls -l` `` will print the content of pwd
+  
+  ---
+  
+  ##### bc
+  Terminal calculator. 
+  *NOTE:* When you change the input base, you have to be careful: `ibase=16;obase=10` will set the obase to 16! since 10 in base 16 is 16.
+  
+  ex
+  `echo "ibase=16;NUMERO_BASE_16" | bc` convert number from base 16 to base 10
+  `echo "obase=16;NUMERO_BASE_10" | bc` convert number from base 10 to base 16
+  ``echo "obase=16;`echo $?`" | bc `` convert the result of `echo $?` to base 16 (`echo $?` prints the value that the last program executed returned to the OS)
 '''
 tags: [
   "shell"
@@ -111,4 +122,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2017-10-31T14:10:57.185Z"
+updatedAt: "2017-11-09T17:25:06.477Z"

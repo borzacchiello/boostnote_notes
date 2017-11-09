@@ -1,0 +1,27 @@
+type: "SNIPPET_NOTE"
+folder: "624499bc0700af893dfe"
+title: "scheletro programma start assembly"
+description: "scheletro programma start assembly"
+snippets: [
+  {
+    name: "start.s"
+    mode: "Gas"
+    content: '''
+      # compile with flags -nostartfiles -m32
+      
+      .section .text
+      .globl _start
+      
+      _start:
+          # do the function call
+          movl $1, %eax
+          movl $0, %ebx # this value is returned to the OS, type echo $?
+          int $0x80
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-09T17:15:10.779Z"
+updatedAt: "2017-11-09T17:19:30.701Z"
