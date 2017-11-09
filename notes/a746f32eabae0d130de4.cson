@@ -29,6 +29,9 @@ content: '''
   - print hexdump of an address: `px len_in_byte @ addr`, addr can be an expression, ex: `ecx + edx*2`
   - print value at an address: `pv @ addr`
   - pv can be concatenated (only one backtick): `pv @ ``pv @ ecx`` ` -> print what is in memory at the address in ecx
+  ###### Reverse debugging
+  - `dts+`: save state of the program
+  - `dsb`: restore state
   
   ###### EX
   ```
@@ -51,4 +54,4 @@ tags: []
 isStarred: false
 isTrashed: false
 createdAt: "2017-11-08T11:13:55.020Z"
-updatedAt: "2017-11-08T11:28:24.813Z"
+updatedAt: "2017-11-09T12:30:01.022Z"
