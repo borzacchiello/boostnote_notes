@@ -1,0 +1,269 @@
+type: "MARKDOWN_NOTE"
+folder: "a70e6c6c246ebd34db24"
+title: "tkinter"
+content: '''
+  # tkinter
+  Library for GUIs in Python.
+  `from tkinter import *`: import tkinter in python3, for python2 use `Tkinter`
+  ###### very simple gui
+  ``` python
+  from tkinter import *
+  
+  root = Tk() # blank window
+  myLabel = Label(root, text="Hey!")
+  myLabel.pack() # put the label wetherver you want
+  root.mainloop() # run the GUI
+  ```
+  ---
+  #### Frames
+  A frame is a container of objects, it is useful to organize the layout.
+  ###### simple gui with frames
+  ``` python
+  from tkinter import *
+  
+  root = Tk()
+  
+  topFrame = Frame(root)
+  topFrame.pack() # itll put it on top of the layout
+  botFrame = Frame(root)
+  botFrame.pack(side=BOTTOM) # itll put it on bottom
+  
+  button1 = Button(topFrame, text="button1", fg="red") # fg stands for foreground
+  button2 = Button(topFrame, text="button2", fg="blue")
+  button3 = Button(topFrame, text="button3", fg="green")
+  button4 = Button(botFrame, text="button4", fg="purple")
+  
+  # button1.pack(); button2.pack(); button3.pack(); button4.pack() # this will put all button in a column! since pack, by default, will put the buttons on top of each other.
+  button1.pack(side=LEFT); button2.pack(side=LEFT); button3.pack(side=LEFT)
+  button4.pack(side=BOTTOM) # actually BOTTOM is not needed, since button4 is the only thing in the frame
+  
+  root.mainloop()
+  ```
+  **NOTE**: `side=LEFT` means: put the object as LEFT as possible, so if another object has been packed on left, it'll simple pack the current object just after the previous one.
+  
+  ---
+  #### Fill
+  A widget can have as parameter `fill`, a value of fill equals to `X` or `Y` will make the widget grow according to its father: if its parent is the root, when I increase the dimension of the main window, the widget will grow as well (but only in the direction specified by fill).
+  `fill=BOTH, expand=True` makes the widget grow in both direction, expanding according to the father.
+  ###### ex
+  ``` python
+  from tkinter import *
+  
+  root = Tk()
+  
+  one = Label(root, text="One", bg="red", fg="white")
+  one.pack()
+  two = Label(root, text="Two", bg="Green", fg="black")
+  two.pack(fill=X)
+  three = Label(root, text="Three", bg="Blue", fg="white")
+  three.pack(side=LEFT, fill=Y)
+  
+  root.mainloop()
+  ```
+  
+  ---
+  #### Grid layout
+  Alternative to pack, possibility to specify the position of the widget in row and columns.
+  ###### login example
+  ``` python
+  from tkinter import *
+  
+  root = Tk()
+  
+  label_1 = Label(root, text="Name")
+  label_2 = Label(root, text="Password")
+  entry_1 = Entry(root) # blank input field
+  entry_2 = Entry(root)
+  checkbox = Checkbutton(root, text="Keep me logged in")
+  
+  label_1.grid(row=0, column=0) # column=0 is actually redundant, since by default column will be equals to 0
+  # label_1.grid(row=0, column=0, sticky=E) # the label is aligned to east, otherwise it'll be centered
+  label_2.grid(row=1, column=0)
+  
+  entry_1.grid(row=0, column=1)
+  entry_2.grid(row=1, column=1)
+  checkbox.grid(row=2, column=0, columnspan=2) # columnspan will make the checkbox two-column wide
+  # row=2 and column=0 are acually redundant, since by default the row is the next one not used, and the column is 0
+  
+  root.mainloop()
+  ```
+  
+  ---
+  #### Binding functions to layouts
+  A button, for example, can have a function to be called when it is pressed.
+  ###### ex
+  ``` python
+  from tkinter import *
+  
+  root = Tk()
+  
+  def printName():
+    print("Hello, my name is Luca!")
+  
+  button_1 = Button(root, text="Print my name", command=printName) # command is the function to be called when the button is pressed
+  button_1.pack()
+  
+  root.mainloop()
+  ```
+  
+  ###### ex with event
+  ``` python
+  from tkinter import *
+  
+  root = Tk()
+  
+  def printName(event):
+    print("Hello, my name is Luca!")
+  
+  button_1 = Button(root, text="Print my name")
+  button_1.bind("<Button-1>", printName) # <Button-1> refers to the left click of the mouse!
+  button_1.pack()
+  
+  root.mainloop()
+  ```
+  
+  ---
+  #### Events
+  The label of the various mouse clicks are:
+  - `<Button-1>` for left click
+  - `<Button-2>` for middle click
+  - `<Button-3>` for right click
+  ###### ex
+  ``` python
+  from tkinter import *
+  
+  root = Tk()
+  
+  def leftClick(event):
+      print("left click")
+  
+  def rightClick(event):
+      print("right click")
+      
+  def middleClick(event):
+      print("middle click")
+  
+  frame = Frame(root, width=300, height=250)
+  frame.bind("<Button-1>", leftClick)
+  frame.bind("<Button-2>", middleClick)
+  frame.bind("<Button-3>", rightClick)
+  frame.pack()
+  
+  root.mainloop()
+  ```
+  
+  ---
+  #### Organize a layout in a class
+  Clean way to define a layout.
+  ###### ex
+  ``` python
+  from tkinter import *
+  
+  class Buttons:
+      def __init__(self, master): # master is tipically the root, is the father of this layout
+          frame = Frame(master)
+          frame.pack()
+          
+          self.printButton = Button(frame, text="Print Message", command=self.printMessage)
+          self.printButton.pack(side=LEFT)
+          
+          self.quitButton = Button(frame, text="Quit", command=frame.quit) # frame.quit is a function that breaks the mainloop
+          self.quitButton.pack(side=LEFT)
+          
+      def printMessage():
+          print("Hey there!")
+          
+  root = Tk()
+  b = Buttons(root)
+  root.mainloop()
+  ```
+  
+  ---
+  #### Drop down menu + Toolbar + Statusbar
+  ###### ex
+  ``` python
+  from tkinter import *
+  
+  def doNothing():
+      print("Nothing happens...")
+  
+  root = Tk()
+  
+  # ******** DROP DOWN MENU ********
+  
+  my_menu = Menu(root)
+  root.config(menu=my_menu)
+  
+  my_subMenu = Menu(my_menu)
+  my_menu.add_cascade(label="File", menu=my_subMenu)
+  my_subMenu.add_command(label="New Project...", command=doNothing)
+  my_subMenu.add_command(label="New...", command=doNothing)
+  my_subMenu.add_separator() # simply a line
+  my_subMenu.add_command(label="Exit", command=doNothing)
+  
+  my_subMenu2 = Menu(my_menu)
+  my_menu.add_cascade(label="Edit", menu=my_subMenu2)
+  my_subMenu2.add_command(label="Redo", command=doNothing)
+  
+  # ******** TOOLBAR *********
+  
+  toolbar = Frame(root, bg="blue") # the blue color is only to highlight the toolbar
+  insertButt = Button(toolbar, text="InsertImage", command=doNothing)
+  insertButt.pack(side=LEFT, padx=2, pady=2) # two pixels of padding
+  printButt = Button(toolbar, text="InsertImage", command=doNothing)
+  printButt.pack(side=LEFT, padx=2, pady=2)
+  
+  toolbar.pack(side=TOP, fill=X)
+  
+  # ******** STATUSBAR *********
+  
+  status = Label(root, text="Preparing to do nothing...", bd=1, relief=SUNKEN, anchor=W) # bd stands for border, SUNKEN is the type of border
+  status.pack(side=BOTTOM, fill=X)
+  
+  root.mainloop()
+  ```
+  
+  ---
+  #### MessageBox (similar to alert)
+  ###### ex
+  ``` python
+  from tkinter import *
+  import tkinter.messagebox
+  
+  root = Tk()
+  
+  tkinter.messagebox.showinfo("Window Title", "Monkeys can live up to 300 years.")
+  answer = tkinter.messagebox.askquestion("Question 1", "Are u a human?")
+  if answer == "yes":
+      print(":)")
+  else:
+      print("[8)]")
+  ```
+  
+  ---
+  #### Canvas
+  ###### ex
+  ``` python
+  from tkinter import *
+  
+  root = Tk()
+  
+  canvas = Canvas(root, width=200, height=100)
+  canvas.pack()
+  
+  blackLine = canvas.create_line(0, 0, 200, 50) # coordinates of two points of the line. (0,0) is top-left
+  redLine = canvas.create_line(0, 100, 200, 50, fill="red")
+  greenBox = canvas.create_rectangle(25, 25, 130, 60, fill="green") # (25, 25) is the coordinate of the top-left corner, 130 is the width, 60 is the height
+  
+  root.mainloop()
+  ```
+'''
+tags: [
+  "gui"
+  "tkinter"
+  "python"
+]
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-25T11:01:24.393Z"
+updatedAt: "2017-11-25T15:20:53.532Z"

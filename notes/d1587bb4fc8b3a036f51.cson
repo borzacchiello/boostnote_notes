@@ -1,0 +1,23 @@
+type: "SNIPPET_NOTE"
+folder: "5f13e6edbf006a67e706"
+title: "simple directed graph"
+description: "simple directed graph"
+snippets: [
+  {
+    name: "directed_graph.dot"
+    mode: "text"
+    content: '''
+      digraph {
+      	a -> { b, f }
+      	b -> { c, d, e }
+      	f -> { h, j }
+      	d -> { l }
+      }
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-14T14:04:08.340Z"
+updatedAt: "2017-11-14T14:14:04.977Z"

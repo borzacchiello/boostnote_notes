@@ -1,0 +1,13 @@
+type: "MARKDOWN_NOTE"
+folder: "5f13e6edbf006a67e706"
+title: "Command line"
+content: '''
+  # Command line
+  - `dot -Tps  file.dot > out.eps` : crea immagine grafico in formato eps
+  - `dot -Tpng file.dot > out.png` : crea immagine grafico in formato png
+'''
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-14T14:02:00.399Z"
+updatedAt: "2017-11-14T14:03:57.844Z"

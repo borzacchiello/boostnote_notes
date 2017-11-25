@@ -1,0 +1,27 @@
+type: "SNIPPET_NOTE"
+folder: "5f13e6edbf006a67e706"
+title: "directed graph with color"
+description: "directed graph with color"
+snippets: [
+  {
+    name: "simple_directed_colo.dot"
+    mode: "text"
+    content: '''
+      digraph {
+      	node [label="", width=.1, shape=circle, style="filled"]
+      	edge [arrowhead="none"]
+      	a [color="#FFFF00", fillcolor="#FFFF00"]
+      	a -> { b, f }
+      	b [color="#00FF00", fillcolor="#00FF00"]
+      	b -> { c, d, e }
+      	f -> { h, j }
+      	d -> { l }
+      }
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-11-14T14:14:06.868Z"
+updatedAt: "2017-11-14T19:19:36.709Z"

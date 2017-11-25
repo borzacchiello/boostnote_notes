@@ -24,6 +24,11 @@
       "key": "98745b0db9cdfd011220",
       "color": "#FF8E00",
       "name": "c++"
+    },
+    {
+      "key": "5f13e6edbf006a67e706",
+      "color": "#E8D252",
+      "name": "GraphViz"
     }
   ],
   "version": "1.0"
