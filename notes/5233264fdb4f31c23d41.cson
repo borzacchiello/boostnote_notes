@@ -85,6 +85,13 @@ content: '''
   
   ---
   
+  ##### rename
+  `rename` works just like sed, but modifies filenames. In rename, `(` doesn't need the backslash!!! Furthermore, `&` doesn't exist and `\\1, \\2, ecc` are substituted with `$1, $2, ecc`.
+  ex: `rename 's/(.*)/$1.txt/' *` add `.txt` to all file in cwd.
+  ex: `rename 's/([123])\\.(.*)/$1_WELLA_$2/' *` all file that begins with 1, 2 or 3 followed by a dot, are sobstituted with the same name with dot sobstituted with `_WELLA_`. `2.ciaociaozz` -> `2_WELLA_ciaociaozz`
+  
+  ---
+  
   ##### pipe
   Used to pass values between programs. `cmd1 | cmd2` will execute cmd1 and will pass the output of cmd1 as input to cmd2.
   
@@ -122,4 +129,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2017-11-09T17:25:06.477Z"
+updatedAt: "2017-11-28T20:06:31.263Z"
