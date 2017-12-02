@@ -1,0 +1,53 @@
+type: "SNIPPET_NOTE"
+folder: "a70e6c6c246ebd34db24"
+title: "Run multiple bash commands concurrently"
+description: "Run multiple bash commands concurrently"
+snippets: [
+  {
+    name: "run_multiple_commands.py"
+    mode: "Python"
+    content: '''
+      import threading
+      import subprocess
+      import os
+      
+      FNULL = open(os.devnull, 'w')
+      
+      def run(cmd, logfile):
+          p = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=logfile, stderr=FNULL)
+          ret_code = p.wait()
+          logfile.flush()
+          return ret_code
+      
+      def cmd_1():
+          cmd = "find / -name carta_identita.jpg"
+          out = open("cmd_1.txt", "w")
+          run(cmd, out)
+      
+      def cmd_2():
+          cmd = "find / -name code.desktop"
+          out = open("cmd_2.txt", "w")
+          run(cmd, out)
+      
+      
+      t1 = threading.Thread(name="cmd_1", target=cmd_1)
+      t2 = threading.Thread(name="cmd_2", target=cmd_2)
+      
+      t1.start()
+      print "t1 started"
+      t2.start()
+      print "t2 started"
+      
+      t1.join()
+      print "t1 joined"
+      t2.join()
+      print "t2 joined"
+      
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2017-12-01T11:12:27.255Z"
+updatedAt: "2017-12-01T11:12:56.881Z"
