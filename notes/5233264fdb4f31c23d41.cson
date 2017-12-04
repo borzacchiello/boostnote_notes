@@ -42,6 +42,8 @@ content: '''
   `whoami`: my name
   `uname -a`: info about the machine
   `nc -l -p 1234`: open a tcp server which listen on port 1234
+  `ssh user@domain -p port`: ssh connection with domain
+  `scp /path/to/local/file user@domain:/path/to/server`: send a file to server. `-l *Kbit/s*` to limit brandwidth
   
   ---
   ##### tr
@@ -129,4 +131,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2017-11-28T20:06:31.263Z"
+updatedAt: "2017-12-04T11:57:05.701Z"
