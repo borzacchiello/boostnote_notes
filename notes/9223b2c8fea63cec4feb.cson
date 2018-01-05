@@ -1,0 +1,24 @@
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "tmux"
+content: '''
+  # tmux
+  
+  All commands are triggered by pressing the _prefix_ command (by default Ctrl-b).
+  - `tmux new -s session_name`: create a new session with name session_name
+  - `tmux attach -t session_name`: attach to session_name
+  - `tmux list-sessions`: list active sessions
+  - `Prefix + d`: detach the current session
+  - `Prefix + (`: previous session
+  - `Prefix + )`: next session
+  - `Prefix + "`: split vertically
+  - `Prefix + %`: split horizontally
+  - `Prefix + arrow-key`: move between pannels
+  
+  [more info](https://gist.github.com/andreyvit/2921703)
+'''
+tags: []
+isStarred: false
+isTrashed: false
+createdAt: "2018-01-05T09:08:41.627Z"
+updatedAt: "2018-01-05T09:13:55.672Z"
