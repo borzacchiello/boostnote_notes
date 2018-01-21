@@ -23,7 +23,7 @@
     {
       "key": "98745b0db9cdfd011220",
       "color": "#FF8E00",
-      "name": "c++"
+      "name": "C++"
     },
     {
       "key": "5f13e6edbf006a67e706",
@@ -31,9 +31,9 @@
       "name": "GraphViz"
     },
     {
-      "key": "6539f17256b967911b7f",
-      "color": "#B013A4",
-      "name": "todo"
+      "key": "4c8a94761a2196059488",
+      "color": "#E10051",
+      "name": "C"
     }
   ],
   "version": "1.0"

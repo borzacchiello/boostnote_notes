@@ -1,0 +1,82 @@
+createdAt: "2018-01-15T12:41:58.462Z"
+updatedAt: "2018-01-15T14:28:18.191Z"
+type: "MARKDOWN_NOTE"
+folder: "4c8a94761a2196059488"
+title: "syscalls"
+content: '''
+  # syscalls
+  ### fork
+  ``` C
+  #include <unistd.h>
+  #include <sys/wait.h>
+  #include <stdlib.h>
+  [...]
+  pid_t pid;
+  int status;
+  pid = fork();
+  if (pid < 0)
+      exit(EXIT_FAILURE);
+  else if (pid == 0) { // in child
+      [...]
+  } else { // in parent
+      if (wait(&status) == -1)
+          exit(EXIT_FAILURE);
+      int child_status = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+      [...]
+  }
+  ```
+  ---
+  ### open/write
+  ``` C
+  #include <unistd.h> // read, write, close
+  #include <fcntl.h>  // open
+  #include <stdlib.h> // exit
+  #include <stdio.h>  // perror
+  
+  char text[] = "This is a test\\n";
+  
+  int main(int argc, char* argv[]) {
+  
+      int flags = O_WRONLY | O_CREAT | O_TRUNC;   // O_WRONLY: file aperto in sola scrittura
+                                                  // O_CREAT: se il file non esiste, verra' creato
+                                                  // O_TRUNC: se il file esiste, trancare il contenuto
+  
+      // se il file non esiste, allora dobbiamo indicare i permessi
+      mode_t mode = 0640; // Una costante che inizia con 0 (e non 0x) in C e' in notazione ottale
+                          // 0640: user => rw, group => r, others => nessuno
+  
+      // alternativa ad usare numero ottale: usare le costanti definite da POSIX
+      // mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP; // corrisponde a 0644
+  
+      int fd = open("test.txt", flags, mode);
+  
+      if (fd == -1) {
+          perror("Error in open");
+          exit(1);
+      }
+      
+      if (write(fd, text, sizeof(text)) != sizeof(text)) { // verifica che abbiamo scritto tutto quello che volevamo scrivere
+          // se non e' cosi', terminiamo...
+          perror("Error in write");
+          exit(1);
+      }
+      
+      if (close(fd)) {
+          perror("Error in close");
+          exit(1);
+      }
+      
+      return 0;
+  }
+  ```
+  __note__: I/O primitives such as write or read can be interrupted, in this case POSIX will set errno=EINTR. If so, the call should be done again. [REFERENCE](https://www.gnu.org/software/libc/manual/html_node/Interrupted-Primitives.html)
+  a useful macro to handle this situation is:
+  ``` C
+  #define CALL_RETRY(retvar, expression) do { \\
+      retvar = (expression); \\
+  } while (retvar == -1 && errno == EINTR);
+  ```
+'''
+tags: []
+isStarred: false
+isTrashed: false

@@ -1,0 +1,41 @@
+createdAt: "2018-01-15T13:01:31.556Z"
+updatedAt: "2018-01-15T14:49:55.022Z"
+type: "MARKDOWN_NOTE"
+folder: "4c8a94761a2196059488"
+title: "Signal handling"
+content: '''
+  # Signal handling
+  ``` C
+  #include <stdio.h>
+  #include <signal.h>
+  #include <unistd.h>
+  #include <stdlib.h>
+  
+  void myhandler(int signo) {
+      printf("Ricevuto segnale: %d\\n", signo);
+      exit(EXIT_SUCCESS);
+  }
+  
+  int main() {
+  
+      struct sigaction sa = {0};
+      sa.sa_handler = myhandler;
+      int res = sigaction(SIGINT, &sa, NULL);
+  
+      while(1);
+      return 0;
+  }
+  ```
+  - ignore-signal handler: `sa.sa_handler = SIG_IGN`
+  - default handler: `sa.sa_handler = SIG_DFL`
+  - send SIGKILL signal to process with pid=p: `kill(p, SIGKILL)`
+  
+  ### common signals
+  - `SIGINT`: ctrl-c
+  - `SIGCHLD`: triggered when a child terminates
+  
+  __note__: `SIGCHLD` can be used in order to prevent a child process to remain in zombie status, waiting for the parent to collect the status. If the handler is setted to `SIG_IGN` before any fork, children will not be transformed into zombies. [reference](https://www.win.tue.nl/~aeb/linux/lk/lk-5.html)
+'''
+tags: []
+isStarred: false
+isTrashed: false

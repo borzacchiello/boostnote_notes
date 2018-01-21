@@ -1,5 +1,5 @@
 createdAt: "2018-01-09T15:25:24.501Z"
-updatedAt: "2018-01-09T15:27:14.766Z"
+updatedAt: "2018-01-09T15:28:32.918Z"
 type: "SNIPPET_NOTE"
 folder: "a70e6c6c246ebd34db24"
 title: "limit memory"
@@ -15,7 +15,7 @@ snippets: [
       MEMORY_LIMIT = 1024 * 1024 * 1024 * 10 # 10 GiB
       
       def memory_limit():
-          resource.setrlimit(resource.RLIMIT_AS, (MEMORY_LIMIT, MEMORY_LIMIT))
+          resource.setrlimit(resource.RLIMIT_AS, (MEMORY_LIMIT, MEMORY_LIMIT)) # RLIMIT_AS === limit address space
       
       if __name__ == '__main__':
           memory_limit() # Limitates maximun memory usage to MEMORY_LIMIT

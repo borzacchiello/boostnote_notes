@@ -1,0 +1,38 @@
+createdAt: "2018-01-19T12:06:58.468Z"
+updatedAt: "2018-01-19T12:11:34.525Z"
+type: "MARKDOWN_NOTE"
+folder: "d5841d5890db3062d38d"
+title: "common tools"
+content: '''
+  # common tools
+  
+  ### hping3
+  
+  ###### syn-flood
+  `hping3 -i u1 -S -p 80 192.168.0.1`
+  
+  - `-S`: send SYN packet
+  - `-i u1`: wait for 1 microsec between each packet
+  - `-p 80`: target port 80
+  
+  ---
+  
+  ### hashcat
+  `hashcat -m 500 passwordfile dictionary.txt`
+  
+  - 1800 for sha512 unix
+  - 7400 for sha256 unix
+  
+  ---
+  
+  ### netcat
+  
+  `nc -l -p 1234`: listen on port 1234
+  
+  ###### send a file using netcat
+  - `nc -l -p 1234 > out.file` : on receiving side
+  - `nc -w 3 [destination_ip] 1234 < out.file`: on sender side
+'''
+tags: []
+isStarred: false
+isTrashed: false
