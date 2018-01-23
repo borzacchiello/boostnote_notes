@@ -1,5 +1,5 @@
 createdAt: "2018-01-19T12:06:58.468Z"
-updatedAt: "2018-01-19T12:11:34.525Z"
+updatedAt: "2018-01-23T11:43:30.033Z"
 type: "MARKDOWN_NOTE"
 folder: "d5841d5890db3062d38d"
 title: "common tools"
@@ -14,6 +14,21 @@ content: '''
   - `-S`: send SYN packet
   - `-i u1`: wait for 1 microsec between each packet
   - `-p 80`: target port 80
+  
+  ---
+  
+  ### nmap
+  `nmap -sL 192.168.0.0/24`: List Scan - simply list targets to scan (a netdiscover)
+  `nmap 192.168.0.5` : vertical scan
+  - `-A`: Enable OS detection, version detection, script scanning, and traceroute
+  - `-F`: fast scan (scan less port than default scan)
+  - `-v`: verbose mode
+  - `-p 1024-2048`: specify port range (in this case 1024 to 2048)
+  
+  ---
+  
+  ### netdiscover
+  `netdiscover -r 10.0.0.0/24`
   
   ---
   
@@ -32,6 +47,28 @@ content: '''
   ###### send a file using netcat
   - `nc -l -p 1234 > out.file` : on receiving side
   - `nc -w 3 [destination_ip] 1234 < out.file`: on sender side
+  
+  ---
+  
+  ### hydra
+  `hydra 192.168.1.26 ssh2 -s 22 -P pass.txt -L users.txt -e ns -t 10`: simple ssh attack
+  
+  This will attack the system 192.1.68.1.26, on port 22 with the SSH protocol, 10 threads at a time, and try all the combinations of usernames and passwords supplied in the files user.txt and pass.txt (+ empty passwords and passwords the same as the username)
+  
+  ---
+  
+  `hydra 192.168.1.69 http-form-post "/w3af/bruteforce/form_login/dataReceptor.php:user=^USER^&pass=^PASS^:Bad login" -L users.txt -P pass.txt -t 10 -w 30 -o hydra-http-post-attack.txt`: attack to login form
+  
+  `-w`: wait timeout
+  `Bad login`: failure response
+  
+  ---
+  
+  # scan web servers
+  
+  - nikto
+  - uniscan
+  - OWASP ZAP
 '''
 tags: []
 isStarred: false

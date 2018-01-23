@@ -44,6 +44,7 @@ content: '''
   `nc -l -p 1234`: open a tcp server which listen on port 1234
   `ssh user@domain -p port`: ssh connection with domain
   `scp /path/to/local/file user@domain:/path/to/server`: send a file to server. `-l *Kbit/s*` to limit brandwidth
+  `usermod -a -G group user`: add user _user_ to group _group_
   
   ---
   ##### tr
@@ -75,7 +76,8 @@ content: '''
   `sed 's/fox/coati/;s/dog/dingo/' filename` substitute fox with coati and dog with dingo
   `sed -n 's/fox/coat/;p;s/dog/dingo/' filename` substitute _only_ fox with coat! due to `-n` and the lack of `p` at the end, the second transformation will not be printed
   `sed -n 's/fox/coat/;p;s/dog/dingo/;p' filename` as before, but prints each line twice! one with the first substitution and the second with both substitutions
-  `sed -n 's/fox/coat/;s/dog/dingo/;p' filename` print with both substitutions (as the one without `-n`
+  `sed -n 's/fox/coat/;s/dog/dingo/;p' filename` print with both substitutions (as the one without `-n`)
+  `sed '/^$/d'`: delete empty lines
   `sed -e '/*.html/ y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/` all the lines which is compliant with the regular expression, will be transformed in capital letters.
   `cat /etc/passwd | sed 's/\\([a-z_]\\)\\:.*/\\1/gi'` print users in /etc/passwd
   
@@ -131,4 +133,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2017-12-04T11:57:05.701Z"
+updatedAt: "2018-01-23T11:23:25.548Z"

