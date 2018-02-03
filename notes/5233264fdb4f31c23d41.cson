@@ -45,6 +45,7 @@ content: '''
   `ssh user@domain -p port`: ssh connection with domain
   `scp /path/to/local/file user@domain:/path/to/server`: send a file to server. `-l *Kbit/s*` to limit brandwidth
   `usermod -a -G group user`: add user _user_ to group _group_
+  `addr2line 0x40123 -e /path/to/exe`: print the line of code which correspond to the address. The executable must have been compiled with debug info
   
   ---
   ##### tr
@@ -97,7 +98,15 @@ content: '''
   ---
   
   ##### pipe
-  Used to pass values between programs. `cmd1 | cmd2` will execute cmd1 and will pass the output of cmd1 as input to cmd2.
+  Used to pass values between programs. `cmd1 | cmd2` will execute cmd1 and will pass the output of cmd1 (taken from stdout) as input to cmd2 (in stdin).
+  
+  `-> | cmd1 | -> (stdout) | PIPE | -> (stdin) -> | cmd2 | ->`
+  
+  ##### xargs
+  Used to pass values as argument of a program.
+  `find . -name "*.bak" -type f -print | xargs /bin/rm -f`: delete all files with extension `.bak`
+  
+  *NOTE*: pipe will send the stdout of the previous program to the stdin of the second program, xargs will pass the input passed to it in stdin as __argument__ of the program passed to it as argument
   
   ##### redirection
   Used to redirect output of a command to file or to take a file as stdin.
@@ -133,4 +142,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2018-01-23T11:23:25.548Z"
+updatedAt: "2018-02-03T12:42:51.689Z"

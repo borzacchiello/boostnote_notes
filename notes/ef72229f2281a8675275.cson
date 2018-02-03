@@ -20,9 +20,23 @@ content: '''
   ```
   
   in one line: `for i in {1...5}; do COMMAND; done`
+  
+  ##### Signal
+  ``` bash
+  #!/bin/bash
+  
+  # trap ctrl-c and call ctrl_c()
+  trap ctrl_c INT
+  
+  function ctrl_c() {
+      echo
+      echo "SIGINT detected"
+      exit
+  }
+  ```
 '''
 tags: []
 isStarred: false
 isTrashed: false
 createdAt: "2017-11-28T19:48:35.322Z"
-updatedAt: "2017-11-28T19:52:01.598Z"
+updatedAt: "2018-01-30T15:27:43.234Z"
