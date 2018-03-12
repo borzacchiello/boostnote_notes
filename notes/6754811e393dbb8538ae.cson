@@ -1,0 +1,39 @@
+createdAt: "2018-03-12T09:47:47.424Z"
+updatedAt: "2018-03-12T10:31:07.099Z"
+type: "MARKDOWN_NOTE"
+folder: "6ea38810de8e4ec8497c"
+title: "router configuration"
+content: '''
+  # router configuration
+  `enable`: router in enable mode
+  - `copy startup-config running-config`: save current configuration
+  - `show ip route`: show route table
+  
+  `configure terminal`: from enable mode to configuration mode
+  - `interface <interface>`: configure interface (ex: serial 0/0)
+    - `ip address <ip address> <netmask>`: set ip address for the current interface
+    - `clock rate 56000`: set clock rate (only for serial interface)
+    - `no shutdown`: startup interface
+  
+  ## routing
+  The routing table of a router can be updated in two different ways:
+  
+  - using Dynamic routing (by means of specific protocols)
+  - Static routing (which is manually configured)
+  
+  ##### static routing
+  *note* : if there is a change in the topology of the netwok, the administrator must manually reconfigure the routers.
+  *note*: static routing is typically used to provide a backup path, used only if something bad happens in the network.
+  
+  `ip route <dest_ip> <subnet_mask> <A/B>`
+  - **A**: I'll specify only the output interface
+  - **B**: I'll specify the next hop router ip address
+  The option A is used when the next-hop is unique and there is no ambiguity.
+  
+  ###### administrative distance
+  used to specify a priority for the routing commands: by default, static routing has an administrative distance equals to 1. Directed connected routers have administrative distance of 0.
+  
+'''
+tags: []
+isStarred: false
+isTrashed: false
