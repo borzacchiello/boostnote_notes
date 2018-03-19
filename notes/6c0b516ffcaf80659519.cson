@@ -1,0 +1,17 @@
+createdAt: "2018-03-19T10:54:36.966Z"
+updatedAt: "2018-03-19T10:57:17.864Z"
+type: "MARKDOWN_NOTE"
+folder: "6ea38810de8e4ec8497c"
+title: "RIP"
+content: '''
+  # RIP
+  ## RIPv1
+  Classful protocol:
+  ![0.pjzai512pj.png](/:storage/0.d170pqpfa0k.png)
+  
+  Problem of non-continuous subnetting:
+  #TODO image
+'''
+tags: []
+isStarred: false
+isTrashed: false

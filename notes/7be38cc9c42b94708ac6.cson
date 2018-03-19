@@ -1,5 +1,5 @@
 createdAt: "2018-03-12T09:43:37.990Z"
-updatedAt: "2018-03-12T09:47:40.760Z"
+updatedAt: "2018-03-18T16:09:05.855Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "Administration tools"
@@ -8,7 +8,8 @@ content: '''
   #### ping
   Based on STMP protocol. STMP is used to report error on ISO/OSI lv. 3. Ping uses the ECHO request from STMP, when the ECHO packet reaches the destination pc, then an ECHO reply is send back to the sender. 
   #### trace route
-  Silar to ping, but the ttl is set by the sender to 1, with this trick, after the first hop, the packet returns to the sender, in this way it can track every hop of the packet (increasing ttl by 1 at each hop).
+  Similar to ping, but the ttl is set by the sender to 1, with this trick, after the first hop, the packet returns to the sender, in this way it can track every hop of the packet (increasing ttl by 1 at each hop).
+  `tracert` on windows.
 '''
 tags: []
 isStarred: false

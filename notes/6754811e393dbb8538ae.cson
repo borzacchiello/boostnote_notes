@@ -1,5 +1,5 @@
 createdAt: "2018-03-12T09:47:47.424Z"
-updatedAt: "2018-03-12T10:31:07.099Z"
+updatedAt: "2018-03-19T11:34:44.106Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "router configuration"
@@ -8,6 +8,8 @@ content: '''
   `enable`: router in enable mode
   - `copy startup-config running-config`: save current configuration
   - `show ip route`: show route table
+  - `show ip protocols`: show protocols: routing protocol etc.
+  - `clear ip route *`: clear routing table.
   
   `configure terminal`: from enable mode to configuration mode
   - `interface <interface>`: configure interface (ex: serial 0/0)
@@ -15,6 +17,10 @@ content: '''
     - `clock rate 56000`: set clock rate (only for serial interface)
     - `no shutdown`: startup interface
   
+  - `line vty 0 4`
+    - `password <password>`: set password for telnet
+    - `login`
+  - `enable secret <password>`: enter password for privileged mode
   ## routing
   The routing table of a router can be updated in two different ways:
   
@@ -30,9 +36,38 @@ content: '''
   - **B**: I'll specify the next hop router ip address
   The option A is used when the next-hop is unique and there is no ambiguity.
   
+  To set default gateway:
+  `ip route 0.0.0.0 0.0.0.0 <ip_gateway>`
   ###### administrative distance
   used to specify a priority for the routing commands: by default, static routing has an administrative distance equals to 1. Directed connected routers have administrative distance of 0.
   
+  ##### dynamic routing
+  ###### RIPv1
+  Distance vector routing protocol based on Bellman-Ford algorithm. #hops is used as a metric to detect the best path. RIP sync packets every 30 second, UDP transport protocol, port 520.
+  Classfull routing protocol (no subnet mask provided). Routers don't have a complete network view, since multiple networks can be viewd as a single one: non-continuous subnetting is not supported! Summarization of addresses is based on ip classes:
+  ![0.pjzai512pj.png](/:storage/0.d170pqpfa0k.png)
+  
+  *Command guide*:
+  in `configuration` mode:
+  - `router rip`: to enable RIP
+    - `network <ip address of the router in an interface>`: enable rip messages in the link in which the router has the given ip.
+  *note*: in `show ip route`, if RIP is enabled, you should see an R near the routing rules (except for the directly linked routers).
+  
+  in `enable` mode:
+  - `debug ip rip`: enable debug info: print on terminal whenever a rip packet is received
+  
+  ###### RIPv2
+  *Command guide*:
+  in `configuration` mode:
+  - `router rip`:
+    - `version 2`: to enable RIPv2
+    - `disabe auto-summary`: disable classful autosummary, otherwise it behaves exactly as RIPv1
+  
+  #### Default router distribution
+  It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP:
+  In `router rip` mode:
+  - `default-information originate`: redistribute only the default gateway
+  - `redistribute static`: redistribute all the static rules
 '''
 tags: []
 isStarred: false
