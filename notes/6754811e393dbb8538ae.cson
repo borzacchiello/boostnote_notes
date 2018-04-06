@@ -1,5 +1,5 @@
 createdAt: "2018-03-12T09:47:47.424Z"
-updatedAt: "2018-03-19T11:34:44.106Z"
+updatedAt: "2018-04-06T13:42:40.581Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "router configuration"
@@ -62,6 +62,41 @@ content: '''
   - `router rip`:
     - `version 2`: to enable RIPv2
     - `disabe auto-summary`: disable classful autosummary, otherwise it behaves exactly as RIPv1
+  
+  ###### OSPF
+  *Command guide*:
+  in `configuration` mode:
+  - `router ospf <id>`: id is a number in [1 - 65535] and has a local validity.
+    - `network <network address> <wildcard mask> area <area number>`: enable ospf for the given network. wildcard mask is the netmask with every bit flipped.
+    - `passive-interface <interface_type> <interface_number>`: disable updates on an interface.
+  in `enable` mode:
+  - `show ip ospf neighbor`: list neighbors
+  
+  #### DHCP
+  Assign automatically IP addresses.
+  *Command guide*
+  in `configuration` mode:
+  - `ip dhcp pool <NAME_POOL>`: enter in the configuration of dhcp for the specified pool
+    - `network <NET_ADDRESS> <NETMASK>`: enable dhcp, it'll assign the given IPs.
+    - `default-router <DEFAULT GATEWAY IP>`: send default gateway info through dhcp
+    - `dns-server <DNS SERVER IP>`: send dns server info through dhcp
+  
+  in `configuration` mode:
+  - `ip dhcp excluded-address <begin_excluded_ip> [<end_excluded_ip>]`: exclude the IP(s)
+  
+  **NOTE** it is not necessary to exclude the router to the assigned IPs, it is done automatically.
+  
+  #### NAT
+  *Command guide*
+  in `configure <interface>`:
+  - `ip nat inside`: set the interface as _inside_ network
+  - `ip nat outside`: set the interface as _outside_ netword
+  
+  in `configuration` mode:
+  - `access-list <access-list-number> permit <source_address> <wildcard>`: configure NAT for the the given private addresses. _access-list-number_ is a number between 0 and 99 (of our choice).
+  - `ip nat pool <name> <start-ip> <end-ip> netmask <netmask>`: pool of public IP addresses (which is composed by only 1 address in the worst case). With only one public IP address, this command is not necessary
+  - `ip nat inside source list <acl-number> pool <name>`: Translation rule (only if we have a pool of public IP addresses)
+  - `ip nat inside source list <acl-number> interface <interface> overload`: Translation rule (if we have only one public IP address)
   
   #### Default router distribution
   It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP:

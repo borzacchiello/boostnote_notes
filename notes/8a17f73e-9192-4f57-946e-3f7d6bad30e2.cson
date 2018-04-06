@@ -1,0 +1,21 @@
+createdAt: "2018-04-06T07:29:53.329Z"
+updatedAt: "2018-04-06T12:43:00.343Z"
+type: "MARKDOWN_NOTE"
+folder: "6ea38810de8e4ec8497c"
+title: "OSFP - Open Shortest Path First"
+content: '''
+  # OSFP - Open Shortest Path First
+  
+  - At the end of the protocol, each router knows the _network topology_ and builds the routing table with Dijkstra algorithm. The weight of each link is based on the speed of the connection (FastEthernet, Ethernet ...)
+  - OSPF packets encapsulated in IP packets with protcol field equal to 89
+  - OSPF administrative distance equal to 110
+  - Based on flooding of LSA packets
+  
+  **NOTE**: OSFP is unnecessary on interfaces that have only PCs.
+  #### Areas
+  To deal with scalability issues, it is possible to specify areas: ospf operates only in a specific area which tipically has a gatway to talk with other areas
+  ![Screenshot from 2018-04-06 09-47-27.png](/:storage/0.4p8dkn62ctn.png)
+'''
+tags: []
+isStarred: false
+isTrashed: false
