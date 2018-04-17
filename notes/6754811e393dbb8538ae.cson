@@ -1,5 +1,5 @@
 createdAt: "2018-03-12T09:47:47.424Z"
-updatedAt: "2018-04-13T14:13:46.007Z"
+updatedAt: "2018-04-16T10:23:04.489Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "router configuration"
@@ -105,8 +105,8 @@ content: '''
   - `ip nat inside source static <private_address> <public_address>`: translate the private address with this public address.
   
   #### Default router distribution
-  It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP:
-  In `router rip` mode:
+  It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP or OSPF:
+  In `router rip` mode or `router ospf`:
   - `default-information originate`: redistribute only the default gateway
   - `redistribute static`: redistribute all the static rules
 '''
