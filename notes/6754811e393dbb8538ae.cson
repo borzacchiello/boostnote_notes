@@ -1,9 +1,5 @@
 createdAt: "2018-03-12T09:47:47.424Z"
-<<<<<<< HEAD
 updatedAt: "2018-04-20T07:57:43.791Z"
-=======
-updatedAt: "2018-04-16T10:23:04.489Z"
->>>>>>> 23df869b121951569977b9b5d26649530f241fa3
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "Router configuration"
@@ -12,7 +8,6 @@ content: '''
   The question mark `?` is used to list all available commands. It's possible to use it also for the completion of the command.
   
   `enable`: router in enable mode
-<<<<<<< HEAD
   `exit` or `Ctrl+Z` to move back in the hierarchical structure of the CLI
   
   - `copy running-config startup-config`: save current configuration
@@ -24,12 +19,6 @@ content: '''
   - `show clock`
   - `show controllers serial`
   - `show hosts`: show all hosts seen by the router
-=======
-  - `copy startup-config running-config`: save current configuration
-  - `show ip route`: show route table
-  - `show ip protocols`: show protocols: routing protocol etc.
-  - `show ip nat translations`: show NAT rules.
->>>>>>> 23df869b121951569977b9b5d26649530f241fa3
   - `clear ip route *`: clear routing table.
   
   `configure terminal` or `conf t`: from enable mode to configuration mode
