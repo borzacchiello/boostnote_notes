@@ -1,6 +1,11 @@
 {
   "folders": [
     {
+      "key": "6ea38810de8e4ec8497c",
+      "color": "#B013A4",
+      "name": "Network configuration and design"
+    },
+    {
       "key": "624499bc0700af893dfe",
       "color": "#FF8E00",
       "name": "Linux"
@@ -34,11 +39,6 @@
       "key": "4c8a94761a2196059488",
       "color": "#E10051",
       "name": "C"
-    },
-    {
-      "key": "6ea38810de8e4ec8497c",
-      "color": "#B013A4",
-      "name": "Network configuration and design"
     }
   ],
   "version": "1.0"

@@ -1,48 +1,66 @@
 createdAt: "2018-03-12T09:47:47.424Z"
-updatedAt: "2018-04-06T13:42:40.581Z"
+updatedAt: "2018-04-20T07:57:43.791Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
-title: "router configuration"
+title: "Router configuration"
 content: '''
-  # router configuration
+  # Router configuration
+  The question mark `?` is used to list all available commands. It's possible to use it also for the completion of the command.
+  
   `enable`: router in enable mode
-  - `copy startup-config running-config`: save current configuration
-  - `show ip route`: show route table
-  - `show ip protocols`: show protocols: routing protocol etc.
+  `exit` or `Ctrl+Z` to move back in the hierarchical structure of the CLI
+  
+  - `copy running-config startup-config`: save current configuration
+  - `show ip route`: show routing table
+  - `show ip protocols`: show routing protocols.
+  - `show running-config`: show the running configuration
+  - `show startup-config`: show the start up configuration
+  - `show interfaces`
+  - `show clock`
+  - `show controllers serial`
+  - `show hosts`: show all hosts seen by the router
   - `clear ip route *`: clear routing table.
   
-  `configure terminal`: from enable mode to configuration mode
+  `configure terminal` or `conf t`: from enable mode to configuration mode
+  
+  #### Assign IP address to router interfaces
   - `interface <interface>`: configure interface (ex: serial 0/0)
     - `ip address <ip address> <netmask>`: set ip address for the current interface
-    - `clock rate 56000`: set clock rate (only for serial interface)
+    - `clock rate 56000`: set clock rate (if necessary, only for serial interface)
     - `no shutdown`: startup interface
-  
+  ##### Router basics
+  ` hostname <hostname>`: change the name of the router
+  Securing the router for __Telnet__ access:
   - `line vty 0 4`
     - `password <password>`: set password for telnet
     - `login`
+    
+  Securing the router __terminal__:
   - `enable secret <password>`: enter password for privileged mode
-  ## routing
+  ## Routing
   The routing table of a router can be updated in two different ways:
   
-  - using Dynamic routing (by means of specific protocols)
   - Static routing (which is manually configured)
+  - Dynamic routing (by means of specific protocols)
   
-  ##### static routing
-  *note* : if there is a change in the topology of the netwok, the administrator must manually reconfigure the routers.
+  A routing protocol provides a communication channel among routers exchanging reachability information about networks.
+  
+  #### Static routing
+  *note* : if there is a change in the topology of the netwok, the administrator must reconfigure manually routers.
   *note*: static routing is typically used to provide a backup path, used only if something bad happens in the network.
   
-  `ip route <dest_ip> <subnet_mask> <A/B>`
-  - **A**: I'll specify only the output interface
-  - **B**: I'll specify the next hop router ip address
+  `ip route <network_address> <subnet_mask> <A or B>`
+  - **A**: I'll specify only the output **interface**
+  - **B**: I'll specify the **next hop** router ip address
   The option A is used when the next-hop is unique and there is no ambiguity.
   
-  To set default gateway:
-  `ip route 0.0.0.0 0.0.0.0 <ip_gateway>`
-  ###### administrative distance
-  used to specify a priority for the routing commands: by default, static routing has an administrative distance equals to 1. Directed connected routers have administrative distance of 0.
+  To set default gateway/router:
+  `ip route 0.0.0.0 0.0.0.0 <A or B>`
+  ##### Administrative distance
+  It is \\used to specify a priority for the routing commands: by default, static routing has an administrative distance equals to 1. Directed connected routers have administrative distance of 0.
   
-  ##### dynamic routing
-  ###### RIPv1
+  #### Dynamic routing
+  ##### RIPv1
   Distance vector routing protocol based on Bellman-Ford algorithm. #hops is used as a metric to detect the best path. RIP sync packets every 30 second, UDP transport protocol, port 520.
   Classfull routing protocol (no subnet mask provided). Routers don't have a complete network view, since multiple networks can be viewd as a single one: non-continuous subnetting is not supported! Summarization of addresses is based on ip classes:
   ![0.pjzai512pj.png](/:storage/0.d170pqpfa0k.png)

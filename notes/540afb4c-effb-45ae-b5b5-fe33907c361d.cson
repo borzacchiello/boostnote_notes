@@ -1,0 +1,94 @@
+createdAt: "2018-04-18T14:33:29.028Z"
+updatedAt: "2018-04-19T16:04:38.240Z"
+type: "MARKDOWN_NOTE"
+folder: "6ea38810de8e4ec8497c"
+title: "IP Networking"
+content: '''
+  # IP Networking
+  
+  A router makes possible the intercommunications among different subnetworks
+  
+  An IP address identify routers and hosts
+  
+  IP is 32 bit long and there are 2 notations used:
+  
+  - binary notation (e.g. 11010111 . 11001010 . 11.....)
+  - dotted notation (e.g. 192.168.1.1)
+  
+  IP address = NET_ID.HOST_ID. The former identifies the network while the latter identifies the host
+  
+  Subnet Mask is a 32 bit string that has 1s for the net_id and 0s for the host_id
+  
+  Wildcard, instead, is the opposite of the subnet mask.
+  
+  Powers of 2:
+  
+  $$2^7=128, 2^6=64, 2^5=32, 2^4=16, 2^3=8, 2^2=4, 2^1=2, 2^0=2$$
+  
+  Partial sum for the subnet mask are:
+  
+  $$128, 192, 224, 240, 248, 252, 254, 255$$
+  
+  They are important for the IP subnetting process.
+  
+  # Routing Table
+  
+  It's a table present on each router with routing information about known destination networks.
+  
+  ## Default Router/Gateway
+  
+  It's the router to be used as next hop router for traffic directed to an unknown network. It's not mandatory.
+  
+  IP address: `0.0.0.0`
+  Subnet mask: `0.0.0.0`
+  
+  ## Host
+  
+  Any host connected to an IP network must be properly configured:
+  
+  - IP address
+  - Subnet mask
+  - Default gateway
+  
+  ## How to compute IP addresses from network address
+  
+  example: 151.75.40.10/19
+  
+  1. compute how many bits are involved in the host_id
+  
+  $$32-19 = 13$$
+  
+  2. understand in which octect we are: in this case, is the third one because 19 > 16
+  3. compute how many bits are involved in the net_id (partially to the octet of interest)
+  
+  $$19 = 16+3 => 3 bits$$
+  4. the mask portion is at the third position from the left in the partial sum cited above (224)
+  5. the subnet mask for the IP address is
+  $$255.255.224.0$$
+  6. compute the step between subnetworks:
+  
+  $$24-19 = 5 => 2^5 =32$$
+  
+  So, we have found the following network addresses:
+  
+  - 151.75.0.0
+  - 151.75.32.0
+  - 151.75.64.0 that is our network
+  - ...
+  - 151.75.128.0 
+  
+  Now, what is the range of IP addresses??
+  
+  In this case, we have:
+  
+  $$ 151.75.0.1 => 151.75.31.254 $$
+  for the first subnetwork. The last IP address is reserved for broadcast.
+  
+  7. finally the wildcard is:
+  
+  $$0.0.31.255$$
+  
+'''
+tags: []
+isStarred: false
+isTrashed: false
