@@ -1,5 +1,9 @@
 createdAt: "2018-03-12T09:47:47.424Z"
+<<<<<<< HEAD
 updatedAt: "2018-04-20T07:57:43.791Z"
+=======
+updatedAt: "2018-04-16T10:23:04.489Z"
+>>>>>>> 23df869b121951569977b9b5d26649530f241fa3
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "Router configuration"
@@ -8,6 +12,7 @@ content: '''
   The question mark `?` is used to list all available commands. It's possible to use it also for the completion of the command.
   
   `enable`: router in enable mode
+<<<<<<< HEAD
   `exit` or `Ctrl+Z` to move back in the hierarchical structure of the CLI
   
   - `copy running-config startup-config`: save current configuration
@@ -19,6 +24,12 @@ content: '''
   - `show clock`
   - `show controllers serial`
   - `show hosts`: show all hosts seen by the router
+=======
+  - `copy startup-config running-config`: save current configuration
+  - `show ip route`: show route table
+  - `show ip protocols`: show protocols: routing protocol etc.
+  - `show ip nat translations`: show NAT rules.
+>>>>>>> 23df869b121951569977b9b5d26649530f241fa3
   - `clear ip route *`: clear routing table.
   
   `configure terminal` or `conf t`: from enable mode to configuration mode
@@ -79,7 +90,8 @@ content: '''
   in `configuration` mode:
   - `router rip`:
     - `version 2`: to enable RIPv2
-    - `disabe auto-summary`: disable classful autosummary, otherwise it behaves exactly as RIPv1
+    - `no auto-summary`: disable classful autosummary, otherwise it behaves exactly as RIPv1
+    - `network <ip address of the router in an interface>`: the same as RIPv1
   
   ###### OSPF
   *Command guide*:
@@ -87,6 +99,7 @@ content: '''
   - `router ospf <id>`: id is a number in [1 - 65535] and has a local validity.
     - `network <network address> <wildcard mask> area <area number>`: enable ospf for the given network. wildcard mask is the netmask with every bit flipped.
     - `passive-interface <interface_type> <interface_number>`: disable updates on an interface.
+  
   in `enable` mode:
   - `show ip ospf neighbor`: list neighbors
   
@@ -108,7 +121,7 @@ content: '''
   *Command guide*
   in `configure <interface>`:
   - `ip nat inside`: set the interface as _inside_ network
-  - `ip nat outside`: set the interface as _outside_ netword
+  - `ip nat outside`: set the interface as _outside_ network
   
   in `configuration` mode:
   - `access-list <access-list-number> permit <source_address> <wildcard>`: configure NAT for the the given private addresses. _access-list-number_ is a number between 0 and 99 (of our choice).
@@ -116,9 +129,12 @@ content: '''
   - `ip nat inside source list <acl-number> pool <name>`: Translation rule (only if we have a pool of public IP addresses)
   - `ip nat inside source list <acl-number> interface <interface> overload`: Translation rule (if we have only one public IP address)
   
+  static NAT, in `configuration` mode:
+  - `ip nat inside source static <private_address> <public_address>`: translate the private address with this public address.
+  
   #### Default router distribution
-  It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP:
-  In `router rip` mode:
+  It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP or OSPF:
+  In `router rip` mode or `router ospf`:
   - `default-information originate`: redistribute only the default gateway
   - `redistribute static`: redistribute all the static rules
 '''
