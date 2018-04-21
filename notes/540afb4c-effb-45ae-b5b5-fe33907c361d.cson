@@ -1,5 +1,5 @@
 createdAt: "2018-04-18T14:33:29.028Z"
-updatedAt: "2018-04-19T16:04:38.240Z"
+updatedAt: "2018-04-20T09:58:49.802Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "IP Networking"
@@ -92,3 +92,4 @@ content: '''
 tags: []
 isStarred: false
 isTrashed: false
+isPinned: false
