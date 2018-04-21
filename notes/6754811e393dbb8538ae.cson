@@ -1,5 +1,5 @@
 createdAt: "2018-04-20T09:58:55.726Z"
-updatedAt: "2018-04-21T10:27:11.284Z"
+updatedAt: "2018-04-21T17:02:04.042Z"
 type: "MARKDOWN_NOTE"
 content: '''
   # Router configuration
@@ -29,12 +29,12 @@ content: '''
     - `no shutdown`: startup interface
   ##### Router basics
   ` hostname <hostname>`: change the name of the router
-  Securing the router for __Telnet__ access:
+  Securing the router for **Telnet** access:
   - `line vty 0 4`
     - `password <password>`: set password for telnet
     - `login`
     
-  Securing the router __terminal__:
+  Securing the router **terminal**:
   - `enable secret <password>`: enter password for privileged mode
   ## Routing
   The routing table of a router can be updated in two different ways:
@@ -73,6 +73,7 @@ content: '''
   
   in `enable` mode:
   - `debug ip rip`: enable debug info (i.e. print on terminal whenever a rip packet is received)
+  - `undebug all`: disable all debugs enabled
   
   ##### RIPv2
   *Command guide*:
@@ -90,10 +91,21 @@ content: '''
   *Command guide*:
   in `configuration` mode:
   - `router ospf <id>`: id is a number in [1 - 65535] and has a local validity.
-    - `network <network address> <wildcard mask> area <area number>`: enable ospf for the given network. wildcard mask is the netmask with every bit flipped.
+    - `network <network_address> <wildcard_mask> area <area_number>`: enable ospf for the given network. wildcard mask is the netmask with every bit flipped. area number 0 is always present.
     - `passive-interface <interface_type> <interface_number>`: disable updates on an interface.
+    - `router-id <ip_address>`: used to identify the router with one of its own addresses in the OSPF area (not mandatory).
+  
   in `enable` mode:
   - `show ip ospf neighbor`: list neighbors
+  
+  ###### Metrics
+  The metrics of an link in an OSPF area can be set manually entering the following commands in `configuration` mode:
+  
+  - `interface <interface>`: specify the interface
+  - `ip ospf cost <cost>`: specify the cost of that interface
+  
+  The default metrics for a FastEthernet is 1
+  
   
   #### DHCP
   Assign automatically IP addresses.
@@ -120,6 +132,7 @@ content: '''
   - `ip nat pool <name> <start-ip> <end-ip> netmask <netmask>`: pool of public IP addresses (which is composed by only 1 address in the worst case). With only one public IP address, this command is not necessary
   - `ip nat inside source list <acl-number> pool <name>`: Translation rule (only if we have a pool of public IP addresses)
   - `ip nat inside source list <acl-number> interface <interface> overload`: Translation rule (if we have only one public IP address)
+  - `ip nat inside source static <inside_ip> <global_ip>`: used to associate a local IP address to a *specific* global IP address (used for servers)
   
   #### Default router distribution
   It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP:
