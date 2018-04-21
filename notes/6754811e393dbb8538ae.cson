@@ -1,11 +1,14 @@
+
+createdAt: "2018-03-12T09:47:47.424Z"
+updatedAt: "2018-04-20T07:57:43.791Z"
 type: "MARKDOWN_NOTE"
 content: '''
   # Router configuration
   The question mark `?` is used to list all available commands. It's possible to use it also for the completion of the command.
-  
+
   `enable`: router in enable mode
   `exit` or `Ctrl+Z` to move back in the hierarchical structure of the CLI
-  
+
   - `copy running-config startup-config`: save current configuration
   - `copy startup-config running-config`: reload default configuration
   - `show ip route`: show routing table
@@ -17,9 +20,9 @@ content: '''
   - `show controllers serial`
   - `show hosts`: show all hosts seen by the router
   - `clear ip route *`: clear routing table.
-  
+
   `configure terminal` or `conf t`: from enable mode to configuration mode
-  
+
   #### Assign IP address to router interfaces
   - `interface <interface>`: configure interface (ex: serial 0/0)
     - `ip address <ip address> <netmask>`: set ip address for the current interface
@@ -31,53 +34,53 @@ content: '''
   - `line vty 0 4`
     - `password <password>`: set password for telnet
     - `login`
-    
+
   Securing the router __terminal__:
   - `enable secret <password>`: enter password for privileged mode
   ## Routing
   The routing table of a router can be updated in two different ways:
-  
+
   - Static routing (which is manually configured)
   - Dynamic routing (by means of specific protocols)
-  
+
   A routing protocol provides a communication channel among routers exchanging reachability information about networks.
-  
+
   #### Static routing
   *note* : if there is a change in the topology of the netwok, the administrator must reconfigure manually routers.
   *note*: static routing is typically used to provide a backup path, used only if something bad happens in the network.
-  
+
   `ip route <network_address> <subnet_mask> <A or B>`
   - **A**: I'll specify only the output **interface**
   - **B**: I'll specify the **next hop** router ip address
   The option A is used when the next-hop is unique and there is no ambiguity.
-  
+
   To set default gateway/router:
   `ip route 0.0.0.0 0.0.0.0 <A or B>`
   ##### Administrative distance
   It is used to specify a priority for the routing commands: by default, static routing has an administrative distance equals to 1. Directed connected routers have administrative distance of 0.
-  
+
   #### Dynamic routing
   ##### RIPv1
   Distance vector routing protocol based on Bellman-Ford algorithm. #hops is used as a metric to detect the best path. Each router exchanges information only with its neighbour routers. RIP sync packets every 30 second, UDP transport protocol, port 520.
   **Classfull** routing protocol (no subnet mask provided). Routers don't have a complete network view, since multiple networks can be viewd as a single one: non-continuous subnetting is not supported! Summarization of addresses is based on ip classes:
   ![0.pjzai512pj.png](/:storage/0.d170pqpfa0k.png)
-  
+
   *Command guide*:
   in `configuration` mode:
   - `router rip`: to enable RIP
     - `network <ip address of the router in an interface>`: enable rip messages in the link in which the router has the given ip.
   *note*: in `show ip route`, if RIP is enabled, you should see an R near the routing rules (except for the directly linked routers).
-  
+
   in `enable` mode:
   - `debug ip rip`: enable debug info: print on terminal whenever a rip packet is received
-  
+
   ##### RIPv2
   *Command guide*:
   in `configuration` mode:
   - `router rip`:
     - `version 2`: to enable RIPv2
     - `disabe auto-summary`: disable classful autosummary, otherwise it behaves exactly as RIPv1
-  
+
   ###### OSPF
   *Command guide*:
   in `configuration` mode:
@@ -86,7 +89,7 @@ content: '''
     - `passive-interface <interface_type> <interface_number>`: disable updates on an interface.
   in `enable` mode:
   - `show ip ospf neighbor`: list neighbors
-  
+
   #### DHCP
   Assign automatically IP addresses.
   *Command guide*
@@ -95,24 +98,24 @@ content: '''
     - `network <NET_ADDRESS> <NETMASK>`: enable dhcp, it'll assign the given IPs.
     - `default-router <DEFAULT GATEWAY IP>`: send default gateway info through dhcp
     - `dns-server <DNS SERVER IP>`: send dns server info through dhcp
-  
+
   in `configuration` mode:
   - `ip dhcp excluded-address <begin_excluded_ip> [<end_excluded_ip>]`: exclude the IP(s)
-  
+
   **NOTE** it is not necessary to exclude the router to the assigned IPs, it is done automatically.
-  
+
   #### NAT
   *Command guide*
   in `configure <interface>`:
   - `ip nat inside`: set the interface as _inside_ network
   - `ip nat outside`: set the interface as _outside_ netword
-  
+
   in `configuration` mode:
   - `access-list <access-list-number> permit <source_address> <wildcard>`: configure NAT for the the given private addresses. _access-list-number_ is a number between 0 and 99 (of our choice).
   - `ip nat pool <name> <start-ip> <end-ip> netmask <netmask>`: pool of public IP addresses (which is composed by only 1 address in the worst case). With only one public IP address, this command is not necessary
   - `ip nat inside source list <acl-number> pool <name>`: Translation rule (only if we have a pool of public IP addresses)
   - `ip nat inside source list <acl-number> interface <interface> overload`: Translation rule (if we have only one public IP address)
-  
+
   #### Default router distribution
   It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP:
   In `router rip` mode:
