@@ -1,16 +1,62 @@
 createdAt: "2018-03-19T10:54:36.966Z"
-updatedAt: "2018-03-19T10:57:17.864Z"
+updatedAt: "2018-04-21T14:34:02.249Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
-title: "RIP"
+title: "RIP - Routing Information Protocol"
 content: '''
-  # RIP
+  # RIP - Routing Information Protocol
   ## RIPv1
-  Classful protocol:
+  The distance vector routing protocol is based on Bellman-Ford algorithm. The number of hops is used as a metric to detect the best path. Each router exchanges information only with its neighbour routers. RIP syncs packets every 30 second, uses UDP transport protocol on port 520. Additionally the administrative distance is 120.
+  
+  RIP is a **classfull** routing protocol because no subnet mask information is provided in RIP messages. Routers don't have a complete network view, since multiple networks can be viewd as a single one: non-contiguous subnetting is not supported! Summarization of addresses is based on ip classes:
+  
   ![0.pjzai512pj.png](/:storage/0.d170pqpfa0k.png)
+  
+  Actually RIP supports subnetting under the following conditions:
+  - subnets have the subnet mask of the same dimension
+  - subnets are contiguous
+  
+  RIP is enable only on specified directly connected interfaces that will send and receive RIP messages.
+  
+  The command `passive interface <interface>` is used to avoid sending RIP messages through that interface. However, the router will still receive RIP messages from that interface.
+  
+  ### Handling of subnets
+  There are a few questions unanswered yet:  how subnet masks are chosen? And, how to properly handle subnetting?
+  
+  ##### Major network
+  The major network is the class A/B/C network from which it has been done subnetting.
+  
+  *for instance: the major network of 192.168.0.128/25 is 192.168.0.0/24*
+  
+  We recall that
+  
+  - class A ranges 1 -> 127
+  - class B ranges 128 -> 191
+  - class C ranges 192 -> 223
+  
+  #### Message processing
+  
+  ##### Receiving messages
+  Suppose a router receives an update message an address. It will choose the subnet mask according to the following rules:
+  
+  - if the network in the message **does not** belong to the major network of the receiving interface address, then the subnet mask is chosen between A/B/C class
+  - if the network in the message **belongs** to the major network of the receiving interface address, then the subnet mask associated to the network is the one of the receiving interface
+  
+  ##### Sending messages
+  Suppose a router has to send update messages from an interface, the following rules are employed:
+  
+  - if the network to be sent **does not** belong to the same major network of the sending interface, then it will be sent the major network address (in this case we talk about **summarization**)
+  - if the network to be sent **belongs** to the same major network of the sending interface, then it will be sent the network address
+  
+  With *summarization* not all routers see the same network topology.
   
   Problem of non-continuous subnetting:
   #TODO image
+  
+  ## RIPv2
+  RIPv2 is a **classless** routing protocol and inside messages sent by RIPv2 configured router is specified the subnet mask.
+  
+  However, the problem of non-contiguous subnets still remain alive in RIPv2. This happens because the protocol uses *auto-summarization* by default. This configuration option can be disabled.
 '''
 tags: []
 isStarred: false

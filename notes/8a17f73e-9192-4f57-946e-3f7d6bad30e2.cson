@@ -1,17 +1,17 @@
 createdAt: "2018-04-06T07:29:53.329Z"
-updatedAt: "2018-04-06T12:43:00.343Z"
+updatedAt: "2018-04-21T15:53:17.183Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "OSFP - Open Shortest Path First"
 content: '''
   # OSFP - Open Shortest Path First
   
-  - At the end of the protocol, each router knows the _network topology_ and builds the routing table with Dijkstra algorithm. The weight of each link is based on the speed of the connection (FastEthernet, Ethernet ...)
-  - OSPF packets encapsulated in IP packets with protcol field equal to 89
-  - OSPF administrative distance equal to 110
-  - Based on flooding of LSA packets
+  At the end of the protocol, each router knows the exactly _network topology_ and builds the routing table with Dijkstra algorithm. The weight of each link is based on the speed of the connection (FastEthernet, Ethernet ...). Moreover, OSPF packets are encapsulated in IP packets with protocol field equal to 89. The administrative distance for OSPF is 110. It is based on flooding of LSA packets (flooding means to send the packet just received through all interfaces except the one from which we have received the packet).
   
   **NOTE**: OSFP is unnecessary on interfaces that have only PCs.
+  
+  Every router running OSPF sends periodically (10s by default) packets in order to evaluate possible network topology changes. The topology is represented as an oriented graph in which nodes stand for router and networks while edges stand for connection between them. With this kind of representation, each router computes the shortes path tree (set of optimal paths).
+  
   #### Areas
   To deal with scalability issues, it is possible to specify areas: ospf operates only in a specific area which tipically has a gatway to talk with other areas
   ![Screenshot from 2018-04-06 09-47-27.png](/:storage/0.4p8dkn62ctn.png)

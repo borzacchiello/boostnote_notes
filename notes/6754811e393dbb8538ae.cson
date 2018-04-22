@@ -1,8 +1,6 @@
-createdAt: "2018-03-12T09:47:47.424Z"
-updatedAt: "2018-04-20T07:57:43.791Z"
+createdAt: "2018-04-20T09:58:55.726Z"
+updatedAt: "2018-04-21T17:02:04.042Z"
 type: "MARKDOWN_NOTE"
-folder: "6ea38810de8e4ec8497c"
-title: "Router configuration"
 content: '''
   # Router configuration
   The question mark `?` is used to list all available commands. It's possible to use it also for the completion of the command.
@@ -11,6 +9,7 @@ content: '''
   `exit` or `Ctrl+Z` to move back in the hierarchical structure of the CLI
   
   - `copy running-config startup-config`: save current configuration
+  - `copy startup-config running-config`: reload default configuration
   - `show ip route`: show routing table
   - `show ip protocols`: show routing protocols.
   - `show running-config`: show the running configuration
@@ -30,12 +29,12 @@ content: '''
     - `no shutdown`: startup interface
   ##### Router basics
   ` hostname <hostname>`: change the name of the router
-  Securing the router for __Telnet__ access:
+  Securing the router for **Telnet** access:
   - `line vty 0 4`
     - `password <password>`: set password for telnet
     - `login`
     
-  Securing the router __terminal__:
+  Securing the router **terminal**:
   - `enable secret <password>`: enter password for privileged mode
   ## Routing
   The routing table of a router can be updated in two different ways:
@@ -57,12 +56,12 @@ content: '''
   To set default gateway/router:
   `ip route 0.0.0.0 0.0.0.0 <A or B>`
   ##### Administrative distance
-  It is \\used to specify a priority for the routing commands: by default, static routing has an administrative distance equals to 1. Directed connected routers have administrative distance of 0.
+  It is used to specify a priority for the routing commands: by default, static routing has an administrative distance equals to 1. Directed connected routers have administrative distance of 0.
   
   #### Dynamic routing
   ##### RIPv1
-  Distance vector routing protocol based on Bellman-Ford algorithm. #hops is used as a metric to detect the best path. RIP sync packets every 30 second, UDP transport protocol, port 520.
-  Classfull routing protocol (no subnet mask provided). Routers don't have a complete network view, since multiple networks can be viewd as a single one: non-continuous subnetting is not supported! Summarization of addresses is based on ip classes:
+  Distance vector routing protocol based on Bellman-Ford algorithm. #hops is used as a metric to detect the best path. Each router exchanges information only with its neighbour routers. RIP sync packets every 30 second, UDP transport protocol, port 520.
+  **Classfull** routing protocol (no subnet mask provided). Routers don't have a complete network view, since multiple networks can be viewd as a single one: non-continuous subnetting is not supported! Summarization of addresses is based on ip classes:
   ![0.pjzai512pj.png](/:storage/0.d170pqpfa0k.png)
   
   *Command guide*:
@@ -70,27 +69,43 @@ content: '''
   - `router rip`: to enable RIP
     - `network <ip address of the router in an interface>`: enable rip messages in the link in which the router has the given ip.
   *note*: in `show ip route`, if RIP is enabled, you should see an R near the routing rules (except for the directly linked routers).
+    - `passive-interface <interface>`: suppress routing updates on a specific interface (and so into a network)
   
   in `enable` mode:
-  - `debug ip rip`: enable debug info: print on terminal whenever a rip packet is received
+  - `debug ip rip`: enable debug info (i.e. print on terminal whenever a rip packet is received)
+  - `undebug all`: disable all debugs enabled
   
-  ###### RIPv2
+  ##### RIPv2
   *Command guide*:
   in `configuration` mode:
   - `router rip`:
     - `version 2`: to enable RIPv2
     - `no auto-summary`: disable classful autosummary, otherwise it behaves exactly as RIPv1
-    - `network <ip address of the router in an interface>`: the same as RIPv1
   
-  ###### OSPF
+  In **both versions of RIP** it is possible to use two additional commands:
+  
+  - `default-information originate`: distributes default router information to other routers using RIP
+  - `redistribute static`: distributes static routes
+  
+  ##### OSPF
   *Command guide*:
   in `configuration` mode:
   - `router ospf <id>`: id is a number in [1 - 65535] and has a local validity.
-    - `network <network address> <wildcard mask> area <area number>`: enable ospf for the given network. wildcard mask is the netmask with every bit flipped.
+    - `network <network_address> <wildcard_mask> area <area_number>`: enable ospf for the given network. wildcard mask is the netmask with every bit flipped. area number 0 is always present.
     - `passive-interface <interface_type> <interface_number>`: disable updates on an interface.
+    - `router-id <ip_address>`: used to identify the router with one of its own addresses in the OSPF area (not mandatory).
   
   in `enable` mode:
   - `show ip ospf neighbor`: list neighbors
+  
+  ###### Metrics
+  The metrics of an link in an OSPF area can be set manually entering the following commands in `configuration` mode:
+  
+  - `interface <interface>`: specify the interface
+  - `ip ospf cost <cost>`: specify the cost of that interface
+  
+  The default metrics for a FastEthernet is 1
+  
   
   #### DHCP
   Assign automatically IP addresses.
@@ -110,23 +125,24 @@ content: '''
   *Command guide*
   in `configure <interface>`:
   - `ip nat inside`: set the interface as _inside_ network
-  - `ip nat outside`: set the interface as _outside_ network
+  - `ip nat outside`: set the interface as _outside_ netword
   
   in `configuration` mode:
   - `access-list <access-list-number> permit <source_address> <wildcard>`: configure NAT for the the given private addresses. _access-list-number_ is a number between 0 and 99 (of our choice).
   - `ip nat pool <name> <start-ip> <end-ip> netmask <netmask>`: pool of public IP addresses (which is composed by only 1 address in the worst case). With only one public IP address, this command is not necessary
   - `ip nat inside source list <acl-number> pool <name>`: Translation rule (only if we have a pool of public IP addresses)
   - `ip nat inside source list <acl-number> interface <interface> overload`: Translation rule (if we have only one public IP address)
-  
-  static NAT, in `configuration` mode:
-  - `ip nat inside source static <private_address> <public_address>`: translate the private address with this public address.
+  - `ip nat inside source static <inside_ip> <global_ip>`: used to associate a local IP address to a *specific* global IP address (used for servers)
   
   #### Default router distribution
-  It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP or OSPF:
-  In `router rip` mode or `router ospf`:
+  It is possible to configure the default router only at border, and then distribute the default gateway information to the internal network using RIP:
+  In `router rip` mode:
   - `default-information originate`: redistribute only the default gateway
   - `redistribute static`: redistribute all the static rules
 '''
-tags: []
+title: "Router configuration"
+folder: "6ea38810de8e4ec8497c"
 isStarred: false
 isTrashed: false
+tags: []
+isPinned: false

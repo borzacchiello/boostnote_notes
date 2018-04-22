@@ -1,5 +1,5 @@
 createdAt: "2018-04-18T14:33:29.028Z"
-updatedAt: "2018-04-19T16:04:38.240Z"
+updatedAt: "2018-04-21T15:55:54.294Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "IP Networking"
@@ -19,11 +19,11 @@ content: '''
   
   Subnet Mask is a 32 bit string that has 1s for the net_id and 0s for the host_id
   
-  Wildcard, instead, is the opposite of the subnet mask.
+  Wildcard, instead, is the opposite of the subnet mask (each bit is flipped).
   
   Powers of 2:
   
-  $$2^7=128, 2^6=64, 2^5=32, 2^4=16, 2^3=8, 2^2=4, 2^1=2, 2^0=2$$
+  $$2^7=128, 2^6=64, 2^5=32, 2^4=16, 2^3=8, 2^2=4, 2^1=2, 2^0=1$$
   
   Partial sum for the subnet mask are:
   
@@ -75,7 +75,7 @@ content: '''
   - 151.75.32.0
   - 151.75.64.0 that is our network
   - ...
-  - 151.75.128.0 
+  - 151.75.224.0 
   
   Now, what is the range of IP addresses??
   
@@ -92,3 +92,4 @@ content: '''
 tags: []
 isStarred: false
 isTrashed: false
+isPinned: false
