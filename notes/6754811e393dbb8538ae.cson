@@ -1,5 +1,5 @@
 createdAt: "2018-04-20T09:58:55.726Z"
-updatedAt: "2018-04-21T17:02:04.042Z"
+updatedAt: "2018-04-22T18:32:06.976Z"
 type: "MARKDOWN_NOTE"
 content: '''
   # Router configuration
@@ -129,8 +129,9 @@ content: '''
   
   in `configuration` mode:
   - `access-list <access-list-number> permit <source_address> <wildcard>`: configure NAT for the the given private addresses. _access-list-number_ is a number between 0 and 99 (of our choice).
-  - `ip nat pool <name> <start-ip> <end-ip> netmask <netmask>`: pool of public IP addresses (which is composed by only 1 address in the worst case). With only one public IP address, this command is not necessary
-  - `ip nat inside source list <acl-number> pool <name>`: Translation rule (only if we have a pool of public IP addresses)
+  - for a pool of public IP addresses:
+    - `ip nat pool <name> <start-ip> <end-ip> netmask <netmask>`: pool of public IP addresses (which is composed by only 1 address in the worst case). With only one public IP address, this command is not necessary
+    - `ip nat inside source list <acl-number> pool <name>`: Translation rule (only if we have a pool of public IP addresses)
   - `ip nat inside source list <acl-number> interface <interface> overload`: Translation rule (if we have only one public IP address)
   - `ip nat inside source static <inside_ip> <global_ip>`: used to associate a local IP address to a *specific* global IP address (used for servers)
   

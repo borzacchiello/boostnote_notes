@@ -1,18 +1,18 @@
 createdAt: "2018-04-06T13:15:23.661Z"
-updatedAt: "2018-04-06T13:30:17.163Z"
+updatedAt: "2018-04-22T07:09:38.152Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "NAT"
 content: '''
   # NAT
-  IP addresses are not enogh to assign a unique IP address to each network host/device. With NAT, a network needs only one public IP address, every device has an IP address which is valid only locally (private network). Ex:
+  IP addresses are not enough to assign a unique IP address to each network host/device. With NAT, a network needs only one public IP address, every device has an IP address which is valid only locally (private network). Ex:
   ![Screenshot from 2018-04-06 15-20-25.png](/:storage/0.cmrsu92y5j9.png)
   The router which implements NAT, has to modify the outgoing and incoming packets. Two main type of NAT operations exists:
   - Static NAT: one-to-one translation
   - Dynamic NAT: N-to-one translation (few public IP addresses, many private IP addresses)
   ### Static NAT
   ![Screenshot from 2018-04-06 15-24-26.png](/:storage/0.a73eh1a8pod.png)
-  There is a one-to-one association between private addresses and public addresses. Everytime wants to reach an IP which is outside the local network, the router modifies the IP field, changing the IP source. Similarly, the public IP is modified with the private IP when a packet from outside want to reach the private network. The translation is done with the _NAT Table_.
+  There is a one-to-one association between private addresses and public addresses. Everytime a local device wants to reach an IP which is outside the local network, the router modifies the IP field, changing the IP source. Similarly, the public IP is modified with the private IP when a packet from outside wants to reach the private network. The translation is done with the _NAT Table_.
   ### Dynamic NAT
   ![Screenshot from 2018-04-06 15-28-17.png](/:storage/0.84bqe0097lj.png)
   The idea of Dynamic NAT is to use the TCP ports to do the translation.
