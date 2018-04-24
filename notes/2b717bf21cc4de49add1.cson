@@ -1,10 +1,10 @@
 createdAt: "2018-02-12T10:20:08.395Z"
-updatedAt: "2018-02-12T10:21:26.505Z"
+updatedAt: "2018-04-24T09:55:48.152Z"
 type: "MARKDOWN_NOTE"
 folder: "624499bc0700af893dfe"
-title: "Grep"
+title: "grep"
 content: '''
-  # Grep
+  # grep
   
   #### grep useful commands
   Do the following:

@@ -1,0 +1,19 @@
+createdAt: "2018-04-24T09:50:26.716Z"
+updatedAt: "2018-04-24T09:55:25.380Z"
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "rclone"
+content: '''
+  # rclone
+  
+  Command line interface for cloud services: [rclone](https://rclone.org)
+  Based on remotes which are interfaces for cloud services (ex: Dropbox, Google Drive).
+  
+  - Configure a remote: `rclone config`
+  - List all directory in a remote: `rclone lsd remote_name:/path/in/remote`
+  - Copy a file to a remote: `rclone copy /local/file remote_name:/remote/path`
+  - Copy a file from a remote: `rclone copy remote_name:/remote/file /local/path`
+'''
+tags: []
+isStarred: false
+isTrashed: false

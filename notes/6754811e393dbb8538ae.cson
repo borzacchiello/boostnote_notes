@@ -1,5 +1,5 @@
 createdAt: "2018-04-20T09:58:55.726Z"
-updatedAt: "2018-04-22T09:06:06.318Z"
+updatedAt: "2018-04-22T14:15:42.404Z"
 type: "MARKDOWN_NOTE"
 content: '''
   # Router configuration
@@ -17,6 +17,7 @@ content: '''
   - `show interfaces`
   - `show clock`
   - `show controllers serial`
+  - `show ip ospf interfaces`: show interfaces configured with ospf and the cost
   - `show hosts`: show all hosts seen by the router
   - `clear ip route *`: clear routing table.
   
