@@ -3,7 +3,7 @@ folder: "624499bc0700af893dfe"
 title: "Radare 2"
 content: '''
   # Radare 2
-  
+  [documentation](https://radare.gitbooks.io/radare2book/content/)
   - `s addr`: go to address
   - `aaa`: analyze the binary
   - `afl`: list all function
@@ -25,11 +25,11 @@ content: '''
   - set breakpoint: `db addr`, note that addr can be also a name of a function (found with afl), ex: `db sys.main`
   - list breakpoints: `db`
   - continue until breakpoint: `dc`
-  - enter in visual panel mode: `V!`, tab to change panel, x to close a panel, M to create a new panel, : to type a command
+  - enter in visual panel mode: `V!`, `tab` to change panel, `x` to close a panel, `M` to create a new panel, `:` to type a command
   - print hexdump of an address: `px len_in_byte @ addr`, addr can be an expression, ex: `ecx + edx*2`
   - print value at an address: `pv @ addr`
   - pv can be concatenated: ``pv @ `pv @ ecx` `` -> print what is in memory at the address in ecx
-  - in visual mode: `F7` (step into), `F8` (step over), `F9` (run)
+  - in visual mode: `s` (step into), `S` (step over), `F9` (run)
   ###### Reverse debugging
   - `dts+`: save state of the program
   - `dsb`: restore state
@@ -55,4 +55,4 @@ tags: []
 isStarred: false
 isTrashed: false
 createdAt: "2017-11-08T11:13:55.020Z"
-updatedAt: "2018-02-02T09:53:23.126Z"
+updatedAt: "2018-04-24T11:09:07.569Z"
