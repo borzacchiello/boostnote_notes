@@ -1,12 +1,38 @@
 createdAt: "2018-04-20T12:59:13.623Z"
-updatedAt: "2018-04-20T12:59:34.870Z"
+updatedAt: "2018-04-27T13:58:04.664Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "Switch configuration"
 content: '''
   # Switch configuration
   
-  //todo
+  in `enable` mode:
+  - `show vlan brief`: print info about configured vlan
+  - `show interfaces <interface_name> switchport`: show info about interface
+  
+  ### VLAN
+  in `configuration` mode:
+  - `vlan <number>`: define the vlan on the switch (then exit)
+  - `interface <name_interface>`: switch to interface mode
+    - `switchport mode access`: set the current interface to access mode (i.e. comunication with an host)
+    - `switchport access vlan <number_vlan>`: set the vlan for the specified interface in access mode
+    - `switchport mode trunk`: set the current interface to trunk mode (i.e. communication between switches)
+    - `switchport trunk native vlan <number_vlan>`: set native vlan for interfaces in trunk mode
+    
+  
+  **NOTE:** vlan 1 is reserved to default vlan.
+  **NOTE:** vlan 99 is typically (not mandatory) used for management.
+  **NOTE:** typically the native interface for trunk interfaces is vlan 99 (not mandatory).
+  
+  ### Telnet access
+  To configure telnet access, it's necessary to configure an IP address for the switch. Typically, a new vlan (managment vlan) is configured, an IP address is configured for each switch on this new vlan and only one host is added to this vlan (this host is the only one who can configure the switch via telnet).
+  in `configuration` mode:
+  - `line vty 0 15`: set password for telnet
+    - `password <password>`
+    -  `login`
+  - `enable secret <password>`: enable enable mode password
+  - `interface vlan <number_vlan>`: enter in interface mode for the virtual interface of the given vlan
+    - `ip address <ip> <mask>`: set ip for the current vlan
 '''
 tags: []
 isStarred: false
