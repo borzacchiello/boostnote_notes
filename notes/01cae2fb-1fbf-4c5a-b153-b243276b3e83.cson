@@ -1,25 +1,19 @@
 createdAt: "2018-04-20T12:39:55.577Z"
-updatedAt: "2018-04-21T14:26:07.397Z"
+updatedAt: "2018-04-29T15:35:58.076Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "VLAN"
 content: '''
   # VLAN
   
-  ## *******TO BE COMPLETED*******
+  VLAN allows to have multiple networks employed only on a single physical infrastructure.
   
-  2 kind of devices:
+  From now on, we will speak about layer 1 of the TCP/IP stack: the Link Layer.
   
-  - hub
-  - switch
+  At this layer, we find 2 kind of devices:
   
-  ### Hub
-  
-  Device that forward frames on all interfaces
-  
-  ### Switch
-  
-  Device that forwards frames only to the outgoing interfaces specified
+  - hub: forwards frames on all interfaces
+  - switch: forwards frames *only* on specific interfaces (using the MAC forwarding table)
   
   #### MAC forwarding table
   
@@ -27,48 +21,50 @@ content: '''
   If a switch does not know where to send a frame, it acts as a hub.
   
   
-  ## Configuration of a switch
+  ## Switch configuration
   
   It is very similar to the one seen for the router. It's called a plug-and-play because it is not necessary to configure the switch to have a running network. The configuration is reserved for advanced purposes.
   
   Configuration is done by assigning an IP address to the switch.
   
-  Why we need an IP address? the only reason is being able to connect remotely to the switch.
+  Why we need an IP address? The only reason is being able to remotely connect to the switch.
   
   How to assign an IP address to the switch?
   
   The difference wrt routers is that we assign a single IP address to the whole switch, instead in a router we assign an IP address to each interface.
   
-  1.  enter the configuration interface
-    1.1 `configure terminal`  
-  2.  create a virtual interface
-    2.1 `interface vlan 99` (99 is a CISCO choice)
-  3. assign the IP address to the interface
-    3.1 `ip address <ip_address> <subnet_mask>`
-  4. enable the interface
-    4.1 `no shutdown`
+  *Command guide*
+  in `configuration mode`:
   
-  What is a VLAN?
+  - `interface vlan [2-99]`: create a virtual interface
+    - `ip address <ip_address> <subnet_mask>`: assign the IP address to the interface
+    - `no shutdown`: enable the interface
   
-  VLAN allows to have multiple networks employed only on a single physical infrastructure.
-  
-  ###### Advantages
+  ###### VLAN advantages
   
   - security
   - cost saving
   - reduction of broadcast traffic
   
-  3 phases:
+  ## VLAN configuration
   
-  - all switches must know all the VLANs existing
-    - we should assign an identifier to the VLAN `vlan <id>`
-    - assign a name (not mandatory) `name <name>`
+  **NOTE**: all switches must know all the existing VLANs
   
+  *Command guide*
+  in `configuration mode`:
   
-  Access Ports: ports directly connected to a  single  VLAN
+  - `vlan <id>`: assign an identifier to the VLAN
+  - `name <name>`: assign a name to the VLAN (not mandatory) 
+  
+  VLAN 1 is the default one.
+  
+  Access Ports: ports directly connected to a single VLAN
   Trunk Ports: ports connected to many VLANs
   
-  ##### Configure an access port
+  ### Access port configuration
+  
+  *Command guide*
+  in `configuration mode`:
   
   - `interface <interface>`
   - `switchport mode access`
@@ -78,24 +74,21 @@ content: '''
   
   The standard Ethernet header should be extended with a control tag.
   
-  ##### Configure an trunk port
+  ### Trunk port configuration
+  
+  *Command guide*
+  in `configuration mode`:
   
   - `interface <interface>`
   - `switchport mode trunk`
-  - `switchport trunk native vlan <id>`
+  - `switchport trunk native vlan <id>`: define the VLAN for management
+  - `switchport trunk allowed vlan <y-z>`: allow only a subset of VLANs on a trunk port
   
+  ### Check configuration
   
-  #### Check configuration
+  - `show vlan brief`: show general configuration of VLANs
+  - `show interface <interface> switchport`: see whether the interface is an access port or a trunk one
   
-  `show vlan brief`
-  
-  If there is only the *default* VLAN we don't have VLANs.
-  
-  #### Check interfaces
-  
-  `show interface <interface> switchport`
-  
-  Used to see whether the interface is an access port or a trunk one.
   
 '''
 tags: []
