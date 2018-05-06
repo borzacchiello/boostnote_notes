@@ -1,5 +1,5 @@
 createdAt: "2018-01-15T12:51:30.518Z"
-updatedAt: "2018-05-06T17:59:53.462Z"
+updatedAt: "2018-05-06T18:06:54.287Z"
 type: "MARKDOWN_NOTE"
 folder: "4c8a94761a2196059488"
 title: "C tricks"
@@ -19,7 +19,6 @@ content: '''
   
   void swap(long* a, long* b);
   asm(" \\
-      .globl swap      \\n \\
       swap:            \\n \\
           pushq (%rdi) \\n \\
           pushq (%rsi) \\n \\
