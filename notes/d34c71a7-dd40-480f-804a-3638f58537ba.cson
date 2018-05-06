@@ -1,5 +1,5 @@
 createdAt: "2018-04-20T12:59:13.623Z"
-updatedAt: "2018-04-27T13:58:04.664Z"
+updatedAt: "2018-05-04T14:11:19.797Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "Switch configuration"
@@ -33,6 +33,22 @@ content: '''
   - `enable secret <password>`: enable enable mode password
   - `interface vlan <number_vlan>`: enter in interface mode for the virtual interface of the given vlan
     - `ip address <ip> <mask>`: set ip for the current vlan
+  
+  ### VTP
+  Used to spread the VLANs among multiple switches, configuring only one (interfaces must be configured manually!).
+  
+  Three modes:
+  - __Server__ (the one who distribute)
+  - __Client__ (the one who receive)
+  - __Transparent__ (passive mode): Used to configure on the client other vlans (in client mode you cannot configure other vlans other then the ones received by the server)
+  
+  in `enable` mode:
+  - `show vtp status`: show info about vtp
+  
+  in `configuration` mode:
+  - `vtp mode [server|client|transparent]`: choose mode
+  - `vtp domain <name_of_the_domain>`: change the name of the domain. It'll be redistributed automatically to clients but if there are more than one domains in the network, set it manually on clients!
+  - `vtp password <password>`: set password for vtp
 '''
 tags: []
 isStarred: false
