@@ -9,6 +9,7 @@ content: '''
   - `jz AA` -> 74 AA
   - `jnz AA` -> 75 AA
   - `nop` -> 90
+  - `ret` -> c3
   
   ###### jump obbligato x86
   ```
@@ -20,10 +21,14 @@ content: '''
   cmp rax, rax // 48 39 C0
   je LOC // 75 LOC
   ```
+  
+  ###### jmp opcodes x86
+  `0x70` - `0x7F`, `0xE3`
+  
 '''
 tags: [
   "reverse_engineering"
 ]
 isStarred: false
 createdAt: "2017-10-12T22:24:25.526Z"
-updatedAt: "2017-10-31T14:11:35.890Z"
+updatedAt: "2018-05-29T14:38:54.976Z"

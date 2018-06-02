@@ -1,5 +1,5 @@
 createdAt: "2018-04-20T12:59:13.623Z"
-updatedAt: "2018-05-21T10:04:36.992Z"
+updatedAt: "2018-06-02T10:07:03.762Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "Switch configuration"
@@ -92,6 +92,7 @@ content: '''
   - `switchport port-security mac-address <mac-address>`: configure mac security access to the switch statically
   - `switchport port-security [mac-address sticky]`: mac address is configured dynamically: the first pc that tries to connect is saved. If sticky, the command is saved in running-config
   **NOTE**: do not configure on trunk ports.
+  **NOTE**: the command `switchport port-security` is mandatory since it activates port-security in either static or dynamic case.
 '''
 tags: []
 isStarred: false
