@@ -1,5 +1,5 @@
 createdAt: "2018-04-20T12:59:13.623Z"
-updatedAt: "2018-05-21T10:04:36.992Z"
+updatedAt: "2018-06-02T08:57:20.693Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "Switch configuration"
@@ -86,6 +86,20 @@ content: '''
     - `access-list 100 permit ip any any`: permit all traffic (note that command are checked in order: if before this command there is another rule, the other rule is checked first)
   
   **NOTE**: access list is applied to an interface with `ip access-group` command, the same as standard.
+  
+  ##### Named
+  in `configuration` mode:
+  - `ip access-list <standard|extended> <access-list name>`: declaring the new named access list
+    - `<permit|deny> <protocol> <source> <source-wildcard> [operator [port]] <destination> <destination-wildcard> [operator [port]] [established] [precedence <precedence>] [tos <tos>] [log] [time-range <time-range>]`
+  
+  Modify a rule example:
+    - `ip access-list extended SERVER-ACCESS`
+      - `no 20`
+      - `20 permit ip host 192.168.1.77 any`
+  
+  Insert a rule between two rules (e.g. 25 between 20 and 30):
+    - `ip access-list extended SERVER-ACCESS`
+      - `25 deny ip host 192.168.1.88 any`
   
   ##### Ethernet security
   in `configuration` mode:
