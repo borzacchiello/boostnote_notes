@@ -1,0 +1,73 @@
+createdAt: "2018-09-25T11:48:22.241Z"
+updatedAt: "2018-09-25T12:03:16.251Z"
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "Fish programming"
+content: '''
+  # Fish programming
+  
+  Fish shell website fishshell.com
+  
+  #### variables
+  - **declare** a variable: `set var 'Value'`
+  - **use** a variable: `echo var: $var$` 
+  - **export** a variable: `set -x var 'Value'`
+  
+  #### subcommands
+  subcommands (declared in bash with a backtick \\`) are declared with parenthesis:
+  ex: `ls -l (which python)`
+  
+  #### conditionals
+  if based on the **exit status** of the command
+  ```
+  if grep fish /etc/shells
+      echo Found fish
+  else if grep bash /etc/shells
+      echo Found bash
+  else
+      echo Got nothing
+  end
+  ```
+  ```
+  switch (uname)
+  case Linux
+      echo Hi Tux!
+  case Darwin
+      echo Hi Hexley!
+  case FreeBSD NetBSD DragonFly
+      echo Hi Beastie!
+  case '*'
+      echo Hi, stranger!
+  end
+  ```
+  
+  #### for
+  ```
+  for i in (seq 5)
+    touch file_$i.txt
+  end
+  ```
+  
+  ```
+  for f in (ls)
+    echo $f
+  end
+  ```
+  
+  ```
+  for f in *.txt
+    cp $f $f.bak
+  end
+  ```
+  
+  ### pipes and redirections
+  pipe is identical to bash
+  
+  Unlike other shells, $stderr$ is redirected with a caret `^`
+  
+  `grep fish < /etc/shells > ~/output.txt ^ ~/errors.txt`
+  
+'''
+tags: []
+isStarred: false
+isTrashed: false

@@ -1,0 +1,39 @@
+createdAt: "2018-06-27T10:01:54.362Z"
+updatedAt: "2018-06-27T10:02:33.844Z"
+type: "SNIPPET_NOTE"
+folder: "a70e6c6c246ebd34db24"
+title: "Logging python"
+description: "Logging python"
+snippets: [
+  {
+    name: "logging.py"
+    mode: "Python"
+    content: '''
+      import logging
+      logging.basicConfig()
+      
+      log = logging.getLogger("module")
+      log_a = logging.getLogger("module.a")
+      log_b = logging.getLogger("module.b")
+      
+      class A(object):
+          def __init__(self, a):
+              log_a.debug("created object A")
+              self.a = a
+      
+      class B(object):
+          def __init__(self, b):
+              log_b.debug("created object B")
+              self.b = b
+      
+      log.setLevel(logging.DEBUG)
+      log_a.setLevel(logging.WARNING)
+      
+      a = A(2)
+      b = B(3)
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
