@@ -1,5 +1,5 @@
 createdAt: "2018-09-25T11:48:22.241Z"
-updatedAt: "2018-09-25T12:03:16.251Z"
+updatedAt: "2018-09-25T12:09:16.068Z"
 type: "MARKDOWN_NOTE"
 folder: "624499bc0700af893dfe"
 title: "Fish programming"
@@ -63,7 +63,7 @@ content: '''
   ### pipes and redirections
   pipe is identical to bash
   
-  Unlike other shells, $stderr$ is redirected with a caret `^`
+  Unlike other shells, $stderr$ is redirected with a caret `^` (note that `2>` works also in fish)
   
   `grep fish < /etc/shells > ~/output.txt ^ ~/errors.txt`
   

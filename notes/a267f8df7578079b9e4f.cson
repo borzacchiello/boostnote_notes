@@ -15,7 +15,7 @@ snippets: [
       _start:
           # do the function call
           movl $1, %eax
-          movl $0, %ebx # this value is returned to the OS, type echo $?
+          movl $0, %ebx # this value is returned to the OS, type echo $? (or echo $status in fish shell)
           int $0x80
     '''
   }
@@ -24,4 +24,4 @@ tags: []
 isStarred: false
 isTrashed: false
 createdAt: "2017-11-09T17:15:10.779Z"
-updatedAt: "2017-11-09T17:19:30.701Z"
+updatedAt: "2018-10-02T08:51:38.337Z"

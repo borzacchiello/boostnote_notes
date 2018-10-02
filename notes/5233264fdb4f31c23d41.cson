@@ -47,6 +47,7 @@ content: '''
   `usermod -a -G group user`: add user _user_ to group _group_
   `addr2line 0x40123 -e /path/to/exe`: print the line of code which correspond to the address. The executable must have been compiled with debug info
   `netstat -natp`: list all open connections
+  `du -h -d 1`: list disk memory usage of current folder (human-readable + recursive-depth=1)
   
   ---
   ##### tr
@@ -143,4 +144,4 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2018-06-15T16:52:27.425Z"
+updatedAt: "2018-09-29T12:54:50.076Z"
