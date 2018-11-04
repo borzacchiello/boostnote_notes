@@ -16,6 +16,7 @@ content: '''
   - `[*where]~[*what]`: grep somewhat from somewhere [no spaces]
   - `iz`: stampa tutte le stringhe della funzione (o sezione) attuale
   - `izz`: stampa tutte le stringhe
+  - `iI`: info su eseguibile (ex canary, NX, ...) (equivalente a `rabin2 -I binary_name` fuori da radare2)
   - `r2 -c=H /bin/ls`: interfaccia grafica web
   - `ag>graph.dot`: CFG della funzione attuale salvato nel file graph.dot
   - `ga` [g]oto symbol a. salta al codice disassemblato della riga con l'identificatore [a]
@@ -55,4 +56,4 @@ tags: []
 isStarred: false
 isTrashed: false
 createdAt: "2017-11-08T11:13:55.020Z"
-updatedAt: "2018-04-24T11:09:07.569Z"
+updatedAt: "2018-10-17T17:14:47.552Z"
