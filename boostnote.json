@@ -39,6 +39,11 @@
       "key": "4c8a94761a2196059488",
       "color": "#E10051",
       "name": "C"
+    },
+    {
+      "key": "0f90ad9dcffed499a199",
+      "color": "#FF8E00",
+      "name": "Docker"
     }
   ],
   "version": "1.0"

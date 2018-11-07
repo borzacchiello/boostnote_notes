@@ -1,0 +1,29 @@
+createdAt: "2018-11-07T09:12:04.634Z"
+updatedAt: "2018-11-07T10:28:15.584Z"
+type: "MARKDOWN_NOTE"
+folder: "0f90ad9dcffed499a199"
+title: "commands"
+content: '''
+  # commands
+  - `docker image ls`: list images
+  - `docker container ls`: list _active_ containers (with `-a` list all containers)
+  - `docker rm %container_id%`: delete container with id=`%container_id%`
+  - `docker rmi %image_id%`: delete image with id=`%image_id%`
+  - `docker run --name=%name% %image% [command]`: crete container with name `%name%` from image `%image%`
+    - `--rm`: delete container after termination
+    - `-ti` : interactive terminal (tty)
+    - `-v local_folder:docker_folder`: mound `local_folder` in `docker_folder`
+    - `ctrl-p-q`: detach from container
+  - `docker attach %container%`: attach to running container
+  - `docker start %container%`: start a stopped container
+  - `docker kill %container%`: stop a running container
+  - `docker commit -m "Message" -a "Author Name" [containername] [imagename]`: create an image from container
+  
+  ### push docker image on docker hub
+  - `docker login --username=[username]`: first login
+  - `docker tag [image id] [username]/[image name]:[tag]`: tag the image
+  - `docker pull [username]/[image name]`: pull the image
+'''
+tags: []
+isStarred: false
+isTrashed: false
