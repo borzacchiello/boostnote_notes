@@ -1,0 +1,105 @@
+createdAt: "2018-11-16T12:48:21.643Z"
+updatedAt: "2018-11-16T12:49:19.403Z"
+type: "SNIPPET_NOTE"
+folder: "a70e6c6c246ebd34db24"
+title: "Named Pipe"
+description: "Named Pipe"
+snippets: [
+  {
+    name: "proc1.py"
+    mode: "Python"
+    content: '''
+      import os
+      import errno
+      
+      FIFO_1 = 'pipe1'
+      FIFO_2 = 'pipe2'
+      
+      def read_until_newline(fd):
+          ris = ""
+          while 1:
+              c = os.read(fd, 1)
+              if c == "\\n":
+                  break
+              ris += c
+          return ris
+      
+      try:
+          os.mkfifo(FIFO_1)
+      except OSError as oe: 
+          if oe.errno != errno.EEXIST:
+              raise
+      try:
+          os.mkfifo(FIFO_2)
+      except OSError as oe: 
+          if oe.errno != errno.EEXIST:
+              raise
+      
+      print("Opening FIFO...")
+      fifo1 = os.open(FIFO_1, os.O_RDONLY)
+      print "fifo1 opened"
+      fifo2 = os.open(FIFO_2, os.O_WRONLY | os.O_NONBLOCK)
+      print "fifo2 opened"
+      
+      os.write(fifo2, "ciao\\n")
+      data = read_until_newline(fifo1)
+      print "read from fifo1:", data
+      os.write(fifo2, "hola\\n")
+      data = read_until_newline(fifo1)
+      print "read from fifo2:", data
+      
+      os.close(fifo2)
+      
+    '''
+  }
+  {
+    name: "proc2.py"
+    mode: "Python"
+    content: '''
+      import os
+      import errno
+      
+      FIFO_1 = 'pipe1'
+      FIFO_2 = 'pipe2'
+      
+      def read_until_newline(fd):
+          ris = ""
+          while 1:
+              c = os.read(fd, 1)
+              if c == "\\n":
+                  break
+              ris += c
+          return ris
+      
+      try:
+          os.mkfifo(FIFO_1)
+      except OSError as oe: 
+          if oe.errno != errno.EEXIST:
+              raise
+      try:
+          os.mkfifo(FIFO_2)
+      except OSError as oe: 
+          if oe.errno != errno.EEXIST:
+              raise
+      
+      print("Opening FIFO...")
+      fifo1 = os.open(FIFO_1, os.O_WRONLY | os.O_NONBLOCK)
+      print "fifo1 opened"
+      fifo2 = os.open(FIFO_2, os.O_RDONLY)
+      print "fifo2 opened"
+      
+      os.write(fifo1, "ciao\\n")
+      data = read_until_newline(fifo2)
+      print "read from fifo2:", data
+      os.write(fifo1,"hola\\n")
+      data = read_until_newline(fifo2)
+      print "read from fifo2:", data
+      
+      os.close(fifo1)
+      
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
