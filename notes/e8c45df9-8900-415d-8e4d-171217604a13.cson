@@ -1,0 +1,115 @@
+createdAt: "2018-12-03T11:47:42.803Z"
+updatedAt: "2018-12-03T11:49:15.046Z"
+type: "SNIPPET_NOTE"
+folder: "624499bc0700af893dfe"
+title: "Wrap malloc and free"
+description: "Wrap malloc and free"
+snippets: [
+  {
+    name: "my_malloc.c"
+    mode: "C"
+    content: '''
+      #define _GNU_SOURCE
+      
+      #include <stdio.h>
+      #include <dlfcn.h>
+      
+      static void* (*real_malloc)(size_t)=NULL;
+      static void (*real_free)(void*)=NULL;
+      
+      static void mtrace_init(void)
+      {
+          real_malloc = dlsym(RTLD_NEXT, "malloc");
+          if (NULL == real_malloc) {
+              fprintf(stderr, "Error in `dlsym`: %s\\n", dlerror());
+          }
+      
+          real_free = dlsym(RTLD_NEXT, "free");
+          if (NULL == real_free) {
+              fprintf(stderr, "Error in `dlsym`: %s\\n", dlerror());
+          }
+      }
+      
+      void *malloc(size_t size)
+      {
+          if(real_malloc==NULL) {
+              mtrace_init();
+          }
+          void *p = NULL;
+          fprintf(stderr, "malloc(%ld) = ", size);
+          p = real_malloc(size);
+          fprintf(stderr, "%p\\n", p);
+          return p;
+      }
+      
+      void free(void *p)
+      {
+          if(real_free==NULL) {
+              mtrace_init();
+          }
+          printf("free(%p)\\n", p);
+          real_free(p);
+      }
+      
+    '''
+  }
+  {
+    name: "Makefile"
+    mode: "text"
+    content: '''
+      all: malloc prova
+      	LD_PRELOAD=`pwd`/my_malloc.so ./prova 100
+      
+      malloc:
+      	gcc -shared -fPIC -o my_malloc.so my_malloc.c -ldl
+      
+      prova:
+      	gcc -o prova prova.c
+      
+      clean:
+      	rm prova my_malloc.so
+    '''
+  }
+  {
+    name: "prova.c"
+    mode: "C"
+    content: '''
+      #include <stdlib.h>
+      #include <stdio.h>
+      #include <assert.h>
+      
+      int* range(int n) 
+      {
+          assert (n > 0);
+          int* vals = (int*)malloc(sizeof(int)*n);
+          int i=0;
+          for (;i<n;++i)
+              vals[i] = i;
+          return vals;
+      }
+      
+      int sum(int* l, int n)
+      {
+          int i=0, ris=0;
+          for(;i<n;++i)
+              ris += l[i];
+          return ris;
+      }
+      
+      int main(int argc, char const *argv[])
+      {
+          if (argc != 2) exit(1);
+          else {
+              int n = atoi(argv[1]);
+              int* r = range(n);
+              printf("sum=%d\\n", sum(r, n));
+              free(r);
+          }
+          return 0;
+      }
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false
