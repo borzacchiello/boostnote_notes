@@ -1,0 +1,244 @@
+createdAt: "2018-12-10T17:26:54.080Z"
+updatedAt: "2018-12-10T17:33:01.606Z"
+type: "SNIPPET_NOTE"
+folder: "4c8a94761a2196059488"
+title: "Inject + hook with EasyHook (ty to Adrian Herrera)"
+description: "Inject + hook with EasyHook (ty to Adrian Herrera)"
+snippets: [
+  {
+    name: "inject.c"
+    mode: "C"
+    content: '''
+      #include <stdio.h>
+      #include <string.h>
+      
+      #include <Shlwapi.h>
+      #include <Windows.h>
+      
+      #include <easyhook.h>
+      
+      #define MAX_PATH_LEN 256
+      #define MSG_LEN 512
+      
+      ///
+      /// Write a message to stdout
+      ///
+      static void Message(LPCSTR fmt, ...) 
+      {
+      	CHAR message[MSG_LEN];
+      	va_list args;
+      
+      	va_start(args, fmt);
+      	vsnprintf(message, MSG_LEN, fmt, args);
+      	va_end(args);
+      
+      	printf("[malware-inject] %s", message);
+      }
+      
+      ///
+      /// Checks that the given \\c path is valid and if so returns the full path in
+      /// \\c fullPath. Otherwise the program exits with an error.
+      ///
+      static void GetFullPath(LPCWSTR path, PWCHAR fullPath) 
+      {
+      	if (!path) {
+      		Message("Path has not been provided\\n");
+      		exit(1);
+      	}
+      
+      	if (!PathFileExistsW(path)) {
+      		Message("Invalid path %S has been provided\\n", path);
+      		exit(1);
+      	}
+      
+      	if (!GetFullPathNameW(path, MAX_PATH_LEN, fullPath, NULL)) {
+      		Message("Unable to get full path of %S\\n", path);
+      		exit(1);
+      	}
+      }
+      
+      int main() 
+      {
+      	INT argc;
+      	LPWSTR *argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+      
+      	if (argc < 5) {
+      		printf("Usage: %S [options..]\\n"
+      			"   --dll <dll>       Path to DLL to inject into the application\\n"
+      			"   --app <target>    Path to application to start\\n"
+      			"   --timeout <time>  Timeout value in milliseconds "
+      			"(infinite if not provided)\\n", argv[0]);
+      		exit(1);
+      	}
+      
+      	LPWSTR dllPath = NULL;
+      	WCHAR fullDllPath[MAX_PATH_LEN];
+      
+      	LPWSTR appPath = NULL;
+      	WCHAR fullAppPath[MAX_PATH_LEN];
+      
+      	DWORD timeout = INFINITE;
+      
+      	for (int i = 1; i < argc; ++i) {
+      		if (wcscmp(argv[i], L"--dll") == 0) {
+      			dllPath = argv[++i];
+      			continue;
+      		}
+      
+      		if (wcscmp(argv[i], L"--app") == 0) {
+      			appPath = argv[++i];
+      			continue;
+      		}
+      
+      		if (wcscmp(argv[i], L"--timeout") == 0) {
+      			timeout = wcstoul(argv[++i], NULL, 10);
+      			continue;
+      		}
+      
+      		Message("Unsupported argument: %s\\n", argv[i]);
+      		exit(1);
+      	}
+      
+      	// Check that the given paths are valid and get their full paths
+      	GetFullPath(dllPath, fullDllPath);
+      	GetFullPath(appPath, fullAppPath);
+      
+      	// Start the target application (in a suspended state) and inject the given
+      	// DLL
+      	ULONG pid;
+      	NTSTATUS result = RhCreateAndInject(appPath, (WCHAR*)L"", CREATE_SUSPENDED,
+      		EASYHOOK_INJECT_DEFAULT,
+      #if defined(_M_IX86)
+      		dllPath, NULL,
+      #elif defined(_M_X64)
+      		NULL, dllPath,
+      #else
+      #error "Platform not supported"
+      #endif
+      		NULL, 0, &pid);
+      
+      	if (FAILED(result)) {
+      		Message("RhCreateAndInject failed: %S\\n", RtlGetLastErrorString());
+      		exit(1);
+      	}
+      
+      	Message("Successfully injected %S into %S (PID=0x%x)\\n", fullDllPath,
+      		fullAppPath, pid);
+      
+      	DWORD exitCode = 1;
+      
+      	// Get a handle to the newly-created process and wait for it to terminate.
+      	// Once the process has terminated, get its return code and return that as
+      	// our return code
+      	HANDLE hProcess = OpenProcess(SYNCHRONIZE | PROCESS_QUERY_INFORMATION,
+      		FALSE, pid);
+      	if (hProcess) {
+      		WaitForSingleObject(hProcess, timeout);
+      		GetExitCodeProcess(hProcess, &exitCode);
+      		CloseHandle(hProcess);
+      	}
+      	else {
+      		Message("Unable to open process 0x%x: 0x%X\\n", pid, GetLastError());
+      	}
+      
+      	return exitCode;
+      }
+    '''
+  }
+  {
+    name: "hook.cpp"
+    mode: "C++"
+    content: '''
+      #include <Windows.h>
+      #include <strsafe.h>
+      
+      #include <iostream>
+      #include <easyhook.h>
+      
+      /// Maximum message length to write to S2E debug log
+      #define MSG_LEN 512
+      
+      /// Address to hook
+      #define ADDRESS 0x401080
+      
+      typedef void(*funcpointer)(void *);
+      
+      //////////////////////
+      // Helper functions //
+      //////////////////////
+      
+      ///
+      /// Write a message to stdout.
+      ///
+      static void Message(LPCSTR fmt, ...) 
+      {
+      	CHAR message[MSG_LEN];
+      	va_list args;
+      
+      	va_start(args, fmt);
+      	vsnprintf(message, MSG_LEN, fmt, args);
+      	va_end(args);
+      
+      	printf("[malware-hook] %s", message);
+      }
+      
+      static void patch(funcpointer address_to_patch, funcpointer function_to_load) 
+      {
+      	char opcodes[] = {								// MOV EAX, $ADDRESS_TO_PATCH
+      		0xB8,														// JMP EAX
+      		(unsigned char)(((unsigned long)function_to_load)),
+      		(unsigned char)(((unsigned long)function_to_load) >> 8),
+      		(unsigned char)(((unsigned long)function_to_load) >> 16),
+      		(unsigned char)(((unsigned long)function_to_load) >> 24),
+      		0xFF,
+      		0xE0
+      	};
+      	int len_opcodes = sizeof(opcodes);
+      
+      	DWORD dwProtect;
+      	if (!VirtualProtect(address_to_patch, len_opcodes, PAGE_EXECUTE_READWRITE, &dwProtect)) {
+      		Message("VirtualProtect failed\\n");
+      		exit(1);
+      	}
+      
+      	if (!memcpy((void*)address_to_patch, opcodes, len_opcodes)) {
+      		Message("memcpy failed\\n");
+      		exit(1);
+      	}
+      }
+      
+      ////////////////////////
+      // GetLocalTime hooks //
+      ////////////////////////
+      
+      static VOID FooHook() 
+      {
+      	Message("HACKED\\n");
+      }
+      
+      ////////////////////
+      // Initialisation //
+      ////////////////////
+      
+      
+      // EasyHook will be looking for this export to support DLL injection. If not
+      // found then DLL injection will fail
+      extern "C" void __declspec(dllexport) __stdcall NativeInjectionEntryPoint(REMOTE_ENTRY_INFO *);
+      
+      void __stdcall NativeInjectionEntryPoint(REMOTE_ENTRY_INFO *inRemoteInfo) 
+      {
+      	// Unused
+      	(void*)inRemoteInfo;
+      
+      	patch((funcpointer)ADDRESS, (funcpointer)&FooHook);
+      
+      	//// The process was started in a suspended state. Wake it up...
+      	RhWakeUpProcess();
+      }
+      
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false

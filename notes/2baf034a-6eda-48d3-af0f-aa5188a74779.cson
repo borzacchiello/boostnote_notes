@@ -1,0 +1,23 @@
+createdAt: "2018-12-08T10:40:33.314Z"
+updatedAt: "2018-12-08T10:45:29.017Z"
+type: "MARKDOWN_NOTE"
+folder: "4bd1a1b66665262390bf"
+title: "Registers"
+content: '''
+  # Registers
+  ##### x86 registers
+  ![registers.png](:storage/2baf034a-6eda-48d3-af0f-aa5188a74779/a01af6df.png)
+  
+  ##### x86-64
+  ![registers_x86-64.png](:storage/2baf034a-6eda-48d3-af0f-aa5188a74779/67214f2d.png)
+  
+  ##### caller-save _and_ callee-save
+  The registers `RAX`, `RCX`, `RDX`, `R8`, `R9`, `R10`, `R11` are considered _volatile_ (caller-saved).
+  
+  The registers `RBX`, `RBP`, `RDI`, `RSI`, `RSP`, `R12`, `R13`, `R14`, and `R15` are considered _nonvolatile_ (callee-saved).
+  
+  
+'''
+tags: []
+isStarred: false
+isTrashed: false

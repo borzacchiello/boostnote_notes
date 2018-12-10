@@ -1,0 +1,25 @@
+createdAt: "2018-12-08T10:27:23.827Z"
+updatedAt: "2018-12-08T12:46:55.421Z"
+type: "MARKDOWN_NOTE"
+folder: "4bd1a1b66665262390bf"
+title: "Movement"
+content: '''
+  # Movement
+  #### movs(b/w/d/q)(b/w/d/q) S, D
+  Move S to D (with S smaller then D) extending the value with sign.
+  #### movz(b/w/d/q)(b/w/d/q) S, D
+  Move S to D (with S smaller then D) extending the value with zeroes.
+  #### movsb/w/d/q
+  In the case of quad-word: move data from `rsi` to `rdi` ((b)yte, (w)ord ...)
+  #### scasb/w/d/q
+  In the case of quad-word: _implicitly_ compare `*rdi` with `rax`. Increase `rdi`.
+  #### stosb/w/d/q
+  In the case of quad-word: _implicitly_ compare `rdi` with `rax`. Increase `rdi` _and_ move `rax` in `*rdi`.
+  #### rep [op]
+  repeate [op] `rcx` times.
+  #### repe/ne [op]
+  repeate [op] `rcx` times OR until the ZF is 0 or 1.
+'''
+tags: []
+isStarred: false
+isTrashed: false

@@ -1,0 +1,38 @@
+createdAt: "2018-12-10T13:30:30.720Z"
+updatedAt: "2018-12-10T13:31:41.540Z"
+type: "SNIPPET_NOTE"
+folder: "4c8a94761a2196059488"
+title: "Virtual alloc and write process memory"
+description: "Virtual alloc and write process memory"
+snippets: [
+  {
+    name: "main.cpp"
+    mode: "C++"
+    content: '''
+      #include<Windows.h>
+      #include<iostream>
+      #include<stdlib.h>
+      using namespace std;
+      
+      int main()
+      {
+      
+      	DWORD pid = GetCurrentProcessId(); // getPid("Skynet - Attacker.exe");
+      	if (pid == 0) return 1;
+      
+      	HANDLE p = OpenProcess(PROCESS_ALL_ACCESS, false, pid);
+      	if (p == 0) return 1;
+      
+      	char s[] = "HelloWorld!";
+      
+      	LPVOID data_address = VirtualAllocEx(p, 0, strlen(s), MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+      	WriteProcessMemory(p, data_address, &s, strlen(s), 0);
+      
+      	cout << "s: " << (char*)data_address << "\\n";
+      }
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false

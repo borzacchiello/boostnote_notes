@@ -1,0 +1,15 @@
+createdAt: "2018-12-08T10:37:21.555Z"
+updatedAt: "2018-12-08T10:39:02.405Z"
+type: "MARKDOWN_NOTE"
+folder: "4bd1a1b66665262390bf"
+title: "Calling convention"
+content: '''
+  # Calling convention
+  
+  #### System V AMD64 ABI
+  
+  The first six integer or pointer arguments are passed in registers `RDI`, `RSI`, `RDX`, `RCX`, `R8`, `R9`.
+'''
+tags: []
+isStarred: false
+isTrashed: false
