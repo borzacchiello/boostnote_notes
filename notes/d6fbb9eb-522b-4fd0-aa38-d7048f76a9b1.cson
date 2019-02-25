@@ -1,0 +1,20 @@
+createdAt: "2018-12-16T10:35:37.051Z"
+updatedAt: "2018-12-16T10:41:54.790Z"
+type: "MARKDOWN_NOTE"
+folder: "c08e7844b7ba0ac5bda8"
+title: "Organizzazione programma OpenCl"
+content: '''
+  # Organizzazione programma OpenCl
+  ![host_device.jpg](:storage/d6fbb9eb-522b-4fd0-aa38-d7048f76a9b1/77e374f5.jpg)
+  1. Apro device (creare contesto)
+  2. Alloco memoria sul device
+  3. Copio dati di input sul device
+  4. Creo istanza del Kernel da eseguire (codice che verrà eseguito su ogni thread della gpu)
+  5. Passaggio dei parametri al Kernel
+  6. Esecuzione parallela (NDRange: collezione di thread ognuno con un suo indice specifico)
+  7. Copio dati da device a host
+  8. Rilascio le risorse
+'''
+tags: []
+isStarred: false
+isTrashed: false

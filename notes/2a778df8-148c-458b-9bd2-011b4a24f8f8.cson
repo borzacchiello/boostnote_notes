@@ -1,0 +1,22 @@
+createdAt: "2019-01-03T14:54:32.743Z"
+updatedAt: "2019-01-03T15:30:29.254Z"
+type: "SNIPPET_NOTE"
+folder: "1a74d4b87ffb3d65d815"
+title: "write offsets as comments"
+description: "write offsets as comments"
+snippets: [
+  {
+    name: "script.py"
+    mode: "Python"
+    content: '''
+      start = idaapi.get_func(ADDR).startEA
+      end   = idaapi.get_func(ADDR).endEA
+      
+      for i in xrange(start, end):
+          MakeComm(i, "Offset: 0x%x" % (i - ADDR))
+    '''
+  }
+]
+tags: []
+isStarred: false
+isTrashed: false

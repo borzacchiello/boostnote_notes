@@ -49,6 +49,16 @@
       "key": "4bd1a1b66665262390bf",
       "color": "#B013A4",
       "name": "ReverseEngineering"
+    },
+    {
+      "key": "c08e7844b7ba0ac5bda8",
+      "color": "#FF8E00",
+      "name": "OpenCL"
+    },
+    {
+      "key": "1a74d4b87ffb3d65d815",
+      "color": "#FF8E00",
+      "name": "IDA"
     }
   ],
   "version": "1.0"
