@@ -1,5 +1,5 @@
 createdAt: "2019-03-07T11:49:47.858Z"
-updatedAt: "2019-03-07T11:49:47.858Z"
+updatedAt: "2019-03-07T11:54:25.405Z"
 type: "MARKDOWN_NOTE"
 folder: "6ea38810de8e4ec8497c"
 title: "1 - Pipeline e ILP (instruction level parallelism) - Control Flow Dependencies copy"
@@ -191,4 +191,4 @@ content: '''
 linesHighlighted: []
 tags: []
 isStarred: false
-isTrashed: false
+isTrashed: true
