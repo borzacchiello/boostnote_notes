@@ -59,6 +59,11 @@
       "key": "1a74d4b87ffb3d65d815",
       "color": "#FF8E00",
       "name": "IDA"
+    },
+    {
+      "key": "7180c251cc0f0c61d2d1",
+      "color": "#3FD941",
+      "name": "HPC"
     }
   ],
   "version": "1.0"

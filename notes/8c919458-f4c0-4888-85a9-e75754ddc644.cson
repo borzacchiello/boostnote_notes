@@ -1,0 +1,194 @@
+createdAt: "2019-03-07T11:49:47.858Z"
+updatedAt: "2019-03-07T11:49:47.858Z"
+type: "MARKDOWN_NOTE"
+folder: "6ea38810de8e4ec8497c"
+title: "1 - Pipeline e ILP (instruction level parallelism) - Control Flow Dependencies copy"
+content: '''
+  # 1 - Pipeline e ILP (instruction level parallelism) - Control Flow Dependencies
+  
+  #### Architettura di un calcolatore
+  ![84dd2a1b.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/84dd2a1b.png)
+  
+  #### CMOS power equations
+  ##### Dynamic power (Active power)
+  $P_{dynamic} \\propto 1/2 CV^2f$
+  - Consumo quando il transistor passa da 0 a 1 e da 1 a 0.
+  - C capacità, V voltaggio, f frequenza di switch
+  ##### Static power (Passive power)
+  $P_{static} \\propto I_sV$
+  - Consumo quando il transistor è in quiete
+  - $I_s$ corrente di leakage (parassita)
+  
+  #### Dennard Scaling (1974)
+  Scalando linearmente la feature size, si ha un aumento delle performance sena avere consimo maggiore di potenza (aumento vicinanza tra transistor, diminuisco voltaggio e diminuisco potenza attiva).
+  **PROBLEMA**: potenza passiva aumenta molto rapidamente. Dennard scaling non è del tutto esatta. Non posso diminuire troppo la dimensione, limite fisico.
+  **2006**: power-wall. Non posso più aumentare il numero di transistor. Inizia multicore.
+  
+  ## Instruction Level Parallelism (ILP)
+  **CPI**: clocks per instruction
+  **IPC**: instructions per clock
+  
+  Sovrapponi esecuzione di differenti istruzioni per aumentare il CPI complessivo. Due approcci:
+  - Pipelining (termporal parallelism)
+    - Divisione dell'esecuzione in stadi, sovrapponi le istruzioni appartenenti a stadi differenti
+  - Multiple-issue (spatial parallelism)
+    - Duplicazione delle unità funzionali per eseguire più istruzioni in parallelo (ho più unità di calcolo, e.g., più ALU)
+  
+  Tecniche ortogonali:
+  - Branch prediction
+    - Predizione del risultato delle istruzioni di branch
+  - Instruction scheduling
+    - Esecuzione di istructioni con ordine differente
+  - Hardware-based speclation
+    - Specula sulla correttezza del flusso delle esecuzioni eseguite
+  
+  ### Pipelining (1980s)
+  L'esecuzione di istruzioni è diviso in una sequenza di N stadi
+  - ogni stadio può essere eseguito da un singolo clock di CPU
+  - La latenza di una istruzione è semre uguale a N cicli
+  L'esecuzione di istruzioni contigue differenti è sovrapposta: istruzioni differenti possono occupare stadi differenti allo stesso tempo
+  
+  #### Pipeline processore MIPS (RISC vs Intel che è CISC)
+  Instruction fetch, instruction decode, execute, memory access, write back
+  ![24662a78.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/24662a78.png)
+  ![74014d7c.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/74014d7c.png)
+  **NOTA**: Write Back scrive il risultato nei registri, memory access accede alla memoria.
+  **NOTA**: In MIPS non ci sono istruzioni che prendono operandi da memoria, solo dai registri. Quindi la memory access è usata solo per scrivere il risultato.
+  **NOTA**: Non è l'unico tipo di pipeline. I processori moderni hanno anche 14 stadi.
+  **NOTA**: Avere tanti stadi non significa migliorare troppo le performance, c'è un limite
+  
+  #### CPI ideale vs reale
+  - CPI = 1 ideale
+    - una istruzione per ciclo di clock, in media
+  - CPI > 1 reale
+    - **Structural hazards**: risorse hardware condivise
+    - **Data hazards**: dipendenze dovute ai dati (e.g. ho bisogno del risultato di una istruzione per eseguire la prossima)
+    - **Control hazards**: dipendenze dovute al flusso di controllo (e.g. se ho una branch condizionale, finché non viene valutata, non so dove andare)
+  
+  **Come risolvo gli hazard?** Metodo naif: _stallo_ la pipeline tra istruzioni che confliggono
+  
+  ## Control dependecies
+  La CPU sa se un branh verrà preso solo dopo che la comparazione viene eseguita. Per avere il risultato della comparazione, passano più stati della pipeline.
+  Approccio naif: _stallo_ la pipeline finché il risultato della branch è noto, inducendo un CPI di:
+  $1 + BRANCH \\: FREQUENCY \\; \\cdot \\; BRANCH \\: PENALTY$
+  - Branch fequency: dipende dall'applicazione
+  - Branch penalty: dipende dalla pipeline, possiamo ridurlo ripensando la pipeline
+  
+  ##### scenario 1
+  - Il branch target PC è calcolato nello stato EX
+  - Il risultato della branch è calcolato nello stato EX
+  - La decisione del branch è presa nello stato MEM producando un segnale di controllo
+  Penalità: 3 cicli
+  
+  ![e45b6b94.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/e45b6b94.png)
+  
+  ##### scenario 2
+  Per ridurre la $BRANCH \\: PENALTY$ possiamo fare le seguenti cose:
+  - Assumere non-preso di default
+    - Penalità 0 se il branch non è stato preso, 3 cicli di penalità altrimenti (quando mi accorgo dell'errore, resetto i segnali di controllo nelle pipeline successive ignorandone il risultato. NOP)
+  - Anticipare la decisione del PC nello stadio EX (forwarding)
+    - Penalità 2
+  
+  ![019130ef.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/cd8536c6.png)
+  
+  ##### scenario 3
+  Anticipo la decisione dello stadio ID (early branch execution)
+  - Il target PC è conoscuto dello stadio ID
+  - Penalità 1
+  
+  ![55fbc6ea.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/55fbc6ea.png)
+  
+  **NOTA**: un ciclo di penalità è ancora troppo: la probabilità di avere una istruzione di branch è molto alta, specialmente considerando la programmazione orientata agli oggetti. Inoltre non è detto che sia sempre possibile anticipare la decisione del PC al secondo stadio in pipeline più complesse
+  
+  ### Branch Prediction
+  Viene fatto un guess sul risultato della comparazione. Se sbagliata, il risultato è scartato, è giusta, non fa nulla.
+  
+  ##### Static branch prediction
+  - Prendo un path di default (eg true)
+  - Compiler-based (o user-assisted)
+  - BTFN (backward taken, forward not taken)
+  
+  ##### Dynamic branch prediction
+  - Chiedi al predittore hardware se un branch sarà preso o meno
+    - Basato tipicamente sulla conoscenza delle vecchie predizioni (branch history)
+  - Se la predizione è sbagliata
+    - Aggiorna la branch history per influenzare le predizioni future
+    - _butta_ tutte le istruzioni dopo il branch
+    - Carica la prima istruzione corretta
+  - La penalità dipende dalla pipeline, i.e., da dove la predizione è fatta e da dove la predizione è verificata
+  ---
+  - Assumiamo una pipeline MIPS con le seguenti caratteristiche:
+    - Il target branch PC è calcolato nello stadio ID
+    - Il risultato della branch è calcolato in EX
+    - La decisione è presa in MEM
+  - Assumiamo che il branch non è preso di default (quindi viene presa l'istruzione immediatamente succesiva)
+  - La predizione è fatta durante ID e verificata durante MEM
+    - Alla fine di ID, si sa che l'istruzione è un branch
+    - La predizione può essere invocata prima di EX
+    - Alla fine di MEM, conosciamo il reale prossimo PC
+  
+  - Penalità se la predizione è scorretta:
+    - 3 cicli (uguale se non abbiamo branch prediction)
+  - Penalità se la predizione è corretta:
+    - 1 se taken (perché il fall-through è fallito e quindi la prossima istruzione va flushata)
+    - 0 se not-taken (il fall-though è andato a buon fine)
+  
+  **NOTA** il branch predictor non può essere attivato prima di sapere che è una branch, quindi prma di ID. Devo necessariamente avere un fall-though.
+  **NOTA** stiamo considerando la pipeline in cui la decisione viene presa in MEM, quindi lo _scenario 1_ di prima.
+  
+  ### One-level 1-bit Predictor
+  ![ebe0ad00.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/ebe0ad00.png)
+  - Utilizza una tabella chiamata _Branch Prediction Buffer (BPB)_. E' una memoria veloce per mantenere leinformazioni sulle predizioni indicizzata dai bit _meno significativi_ del PC.
+  - Ogni entry è di 1-bit: 1 se l'ultimo branch era taken, se c'è misprediction, il bit è flippato
+  - Se consideriamo un loop, sbaglierà solo la prima e l'ultima iterazione
+  - Per loop nested, problema: convergerà su 2 errori per ogni esecuzione del loop più esterno
+  
+  ![bc0788d2.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/c31ce01d.png)
+  ### One-level 2-bit Predictor (Smith Algorithm)
+  ![63df8ca4.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/63df8ca4.png)
+  - Due errori devono essere commessi prima di cambiare una predizione
+  - Si può estendere a n-bit con $2^n-1$ stati. Trade-off 
+  
+  ### Two-level Predictor
+  Utilizzo due info:
+  - Una global (pattern che trovo nel processo attuale)
+  - Una locale (i 2-bit di prima)
+  
+  #### Two-level Global Prediction
+  - Utilizza registro BHT (branch history taken), shift register. Le ultime m osservazioni vengono da qualsiasi branch. Rappresenta un path della più recente parte del programma. 
+  ![6dd20f4d.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/6dd20f4d.png)
+  - I dati della BHT sono combinati con quelli del PC per spiazzarsi nella PHT (pattern history table)
+  ![c00fa2ae.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/c00fa2ae.png)
+  #### Two-level Local Prediction
+  - Invece di avere un'unica BHT, ho un array di BHT che spiazzo usando PC. Combino questo BHT con il PC per spiazzarmi in PHT (come prima)
+  ![17c393ea.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/17c393ea.png)
+  
+  #### Tournament Predictor
+  - Combina il Local e il Gloabl predictor di sopra
+  - Misprediction stimata: 0.7-1.0%
+  
+  ## Branch-Table Buffer
+  - Fin'ora non ci siamo preoccupati di capire la destinazione di una branch, ma solo se questa viene presa o meno (eg `ret`, `jmp eax`).
+  - La Branch-Tale Buffer (BTB) può predirre anche la destinazione di una branch
+  - Tipicamente, è invocata durante IF della pipeline
+  - E' implementata come una cache indicizzata da tutto il PC
+  - Si può implementare BPB + BTB durante la fase IF. In questo modo abbiamo sia predizione dell'outcome che predizion del target
+  - Basta salvare i branch taken: per i not-taken il fall-though va bene! (prendo la prossima istruzione)
+  - misprediction: me ne accorgo in MEM
+  - good prediction: penalità 0 (perché agisco durante IF)
+  
+  **NOTA**: posso agire durante la IF perché se trovo l'indirizzo dell'istruzione nella BTB, allora so per certo che è un branch!
+  ![4ddefade.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/4ddefade.png)
+  
+  ## Return Address Stack
+  - La maggior parte delle jump indirette (85%) sono dovute ad una ret. Sono chiamate da più posti, quindi l'accuratezza della BTB può essere bassa (60%)
+  - Una soluzione migliore è data da una piccola cache-stack in cui vengono salvati gli indirizzi di ritorno
+    - Push su function call
+    - Pop on function return
+  - L'accuratezza è perfetta per regolari coppie call/return
+  - Inadeguato per control-flow non convenzionali
+'''
+linesHighlighted: []
+tags: []
+isStarred: false
+isTrashed: false
