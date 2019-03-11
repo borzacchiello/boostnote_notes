@@ -1,5 +1,5 @@
 createdAt: "2019-03-07T09:03:10.950Z"
-updatedAt: "2019-03-07T11:49:28.846Z"
+updatedAt: "2019-03-11T14:18:19.030Z"
 type: "MARKDOWN_NOTE"
 folder: "7180c251cc0f0c61d2d1"
 title: "1 - Pipeline e ILP (instruction level parallelism) - Control Flow Dependencies"
@@ -9,27 +9,79 @@ content: '''
   
   #### Architettura di un calcolatore
   ![84dd2a1b.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/84dd2a1b.png)
+  Esistono varie ISA, tra cui Intel x86, ARM e MIPS. Intel è la più popolare, per via del processore Intel 8086.
+  
+  #### Legge di Moore
+  - "La complessità di un microcircuito, misurata ad esempio tramite il numero di transistor per chip, raddoppia ogni 18 mesi (e quadruplica quindi ogni 3 anni)"
+  - Si basa sull'aspettativa che, nel corso del tempo, a causa dei progressi nella tecnologia dei semiconduttori e del fatto che i transistor diventano più piccoli, il costo di produzione dei transistor declinerà esponenzialmente
+  - In altre parole, dato un costo di produzione costante, il numero di transistor aumenterà in modo esponenziale
   
   #### CMOS power equations
   ##### Dynamic power (Active power)
   $P_{dynamic} \\propto 1/2 CV^2f$
-  - Consumo quando il transistor passa da 0 a 1 e da 1 a 0.
+  - Consumo quando il transistor passa da 0 a 1 e da 1 a 0, i.e. costo transizione transistor acceso/spento
   - C capacità, V voltaggio, f frequenza di switch
+  - Tiene conto del tempo, a differenza dell'energia
   ##### Static power (Passive power)
   $P_{static} \\propto I_sV$
   - Consumo quando il transistor è in quiete
   - $I_s$ corrente di leakage (parassita)
   
   #### Dennard Scaling (1974)
-  Scalando linearmente la feature size, si ha un aumento delle performance sena avere consimo maggiore di potenza (aumento vicinanza tra transistor, diminuisco voltaggio e diminuisco potenza attiva).
-  **PROBLEMA**: potenza passiva aumenta molto rapidamente. Dennard scaling non è del tutto esatta. Non posso diminuire troppo la dimensione, limite fisico.
-  **2006**: power-wall. Non posso più aumentare il numero di transistor. Inizia multicore.
+  - Una serie di regole di scaling per ottenere miglioramenti simultanei del punto di vista della densità di transistor, della frequenza di switching and della dissipazione di potenza
+  - Scalando linearmente la feature size (i.e. la grandezza minima di un transistor, l'area del transistor se lo considerassimo un quadratino), si ha un aumento delle performance senza avere consumo maggiore di potenza (aumento vicinanza tra transistor, diminuisco voltaggio e diminuisco potenza attiva).
+  - Infatti, scalando la feature size di un fattore $\\alpha < 1$:
+    - Capacità e voltaggio scalano di $\\alpha$
+    - Frequenza di switching scala di $1 \\backslash \\alpha$
+    - Potenza dinamica scala di $\\alpha^2$
+    - Densità di transistor scala di $1 \\backslash \\alpha^2$
+  - La densità di potenza dinamica rimane costante se la die area è costante, dove la die area e' l'area della piastrina in silicio sulla quale è realizzato il circuito
+    - Data un'area fissata o un budget di potenza, possiamo aumentare la frequenza di clock
+    - Il Dennard scaling è cio' che connette la legge di Moore al Dennard Scaling
+  - Tipicamente $\\alpha = 0.7$, e quindi possiamo ottenere:
+    -  Uno speed-up della frequenza di 1.4-1.5x
+    -  Uno scale down del voltaggio di 0.7x
+  - Nella pratica, l'aumento della densità dei transistor e la frequenza dominano la diminuzione della capacità e del voltaggio:
+    - Frequenza scala di 2x (meglio)
+    - Voltaggio scala di 0.8x (peggio)
+    - La die area è costante o leggermente aumentata
+  - Questo porta ad una crescita generale del consumo di potenza
+    - Densità di potenza dinamica scala di 1.3-1.8x (molto peggio!) 
+  
+  **PROBLEMA**: c'e un limite per il quale il voltaggio può essere ridotto, visto che ciò causa un aumento esponenziale nella potenza passiva.
+  - La dissipazione di potenza è un problema economico e tecnologico
+    - Maggiore la potenza dissipata, maggiore il calore rilasciato
+    - Se le temperature dei circuiti aumentano, i transistors rallentano
+    - C'è un bisogno di tecnologie di cooling più potenti (e costose)
+      
+  Dennard scaling non è quindi del tutto esatta ed è il suo impiego è cessato a partire dal 2005.
+    - La potenza di leakage era aumentata più di 10 000x
+    - Era il componente dominante della densità di potenza
+  
+  Il Post-Dennard Scaling (2005) ci dice l'aumento di potenza per unità di area
+    - Però la legge di Moore permette di avere più transistor per unità di area
+  
+  Come possiamo aumentare il numero di transistor senza impattare sulla potenza?
+    - Scaling della frequenza statica (di un fattore $\\alpha$)
+    - Scaling del voltaggio dinamico e della frequenza
+    - Limitare il clock
+    - Miglioramenzo della tecnologia CMOS
+    - ...
+  
+  Non posso diminuire troppo la dimensione, limite fisico.
+  **2006**: power-wall: la potenza e non la manifattura limita i miglioramenti microarchitetturali general-purpose.
+   - 130 Watts/cm$^3$ è considerato un upper bound (il Power Wall)
+  
+  Non posso più aumentare il numero di transistor. 
+  Inizia multicore: devo cercare di parallelizzare
   
   ## Instruction Level Parallelism (ILP)
   **CPI**: clocks per instruction
   **IPC**: instructions per clock
   
-  Sovrapponi esecuzione di differenti istruzioni per aumentare il CPI complessivo. Due approcci:
+  Sovrapponi esecuzione di differenti istruzioni per aumentare il CPI complessivo. 
+    - Molte istruzioni eseguite durante lo stesso ciclo di clock
+  Due approcci:
   - Pipelining (termporal parallelism)
     - Divisione dell'esecuzione in stadi, sovrapponi le istruzioni appartenenti a stadi differenti
   - Multiple-issue (spatial parallelism)
@@ -37,10 +89,10 @@ content: '''
   
   Tecniche ortogonali:
   - Branch prediction
-    - Predizione del risultato delle istruzioni di branch
+    - Predizione del risultato delle istruzioni di branch per mantenere le unità funzionali occupate
   - Instruction scheduling
-    - Esecuzione di istructioni con ordine differente
-  - Hardware-based speclation
+    - Esecuzione di istructioni con ordine differente per mantenere le unità funzionali occupate
+  - Hardware-based speculation
     - Specula sulla correttezza del flusso delle esecuzioni eseguite
   
   ### Pipelining (1980s)
@@ -48,38 +100,43 @@ content: '''
   - ogni stadio può essere eseguito da un singolo clock di CPU
   - La latenza di una istruzione è semre uguale a N cicli
   L'esecuzione di istruzioni contigue differenti è sovrapposta: istruzioni differenti possono occupare stadi differenti allo stesso tempo
+   - Posso avere al più N istruzioni in esecuzione in contemporanea
   
   #### Pipeline processore MIPS (RISC vs Intel che è CISC)
-  Instruction fetch, instruction decode, execute, memory access, write back
+  Ho 5 fasi : Instruction fetch, instruction decode, execute, memory access, write back
   ![24662a78.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/24662a78.png)
   ![74014d7c.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/74014d7c.png)
   **NOTA**: Write Back scrive il risultato nei registri, memory access accede alla memoria.
-  **NOTA**: In MIPS non ci sono istruzioni che prendono operandi da memoria, solo dai registri. Quindi la memory access è usata solo per scrivere il risultato.
+  **NOTA**: In MIPS tipicamente le istruzioni non prendono operandi da memoria, solo dai registri. Solo le istruzioni LOAD/STORE vengono utilizzate per accesso diretto alla memoria e queste sono le istruzioni a cui la "memory access" si riferisce. Per gli altri operandi accedo al loro valore nella "decode". Per questo motivo puà sembrare controintuitivo avere la "memory access" dopo "execute".
   **NOTA**: Non è l'unico tipo di pipeline. I processori moderni hanno anche 14 stadi.
-  **NOTA**: Avere tanti stadi non significa migliorare troppo le performance, c'è un limite
-  
+  **NOTA**: Avere tanti stadi non significa migliorare troppo le performance, c'è un limite. Infatti la Legge di Ahmdal ci dice che ci sta un limite alla parallelizzazione del software. 
   #### CPI ideale vs reale
   - CPI = 1 ideale
     - una istruzione per ciclo di clock, in media
-  - CPI > 1 reale
-    - **Structural hazards**: risorse hardware condivise
-    - **Data hazards**: dipendenze dovute ai dati (e.g. ho bisogno del risultato di una istruzione per eseguire la prossima)
+  - CPI > 1 reale per varie ragioni
+    - **Structural hazards**: risorse hardware condivise (e.g. due istruzioni richiedono la stessa risorsa, come l'ALU, allo stesso tempo, anche se nella pipeline ciò non accade ...)
+    - **Data hazards**: dipendenze dovute ai dati (e.g. ho bisogno del risultato di una istruzione per eseguire la prossima. Supponiamo ho un addizione e poi una sottrazione. Non posso fare il decode finchè l'addizione non ha finito di eseguire e quindi vado in stallo)
     - **Control hazards**: dipendenze dovute al flusso di controllo (e.g. se ho una branch condizionale, finché non viene valutata, non so dove andare)
   
   **Come risolvo gli hazard?** Metodo naif: _stallo_ la pipeline tra istruzioni che confliggono
+  - Ci sono ovviamente modi molto più smart per risolvere i conflitti ...
   
   ## Control dependecies
   La CPU sa se un branh verrà preso solo dopo che la comparazione viene eseguita. Per avere il risultato della comparazione, passano più stati della pipeline.
   Approccio naif: _stallo_ la pipeline finché il risultato della branch è noto, inducendo un CPI di:
   $1 + BRANCH \\: FREQUENCY \\; \\cdot \\; BRANCH \\: PENALTY$
-  - Branch fequency: dipende dall'applicazione
+  - Branch fequency: dipende dall'applicazione. I compilatori possono provare a ridurlo (e.g. loop unrolling). Tipicamente però il 20-30% delle istruzioni sono branches.
   - Branch penalty: dipende dalla pipeline, possiamo ridurlo ripensando la pipeline
   
   ##### scenario 1
-  - Il branch target PC è calcolato nello stato EX
-  - Il risultato della branch è calcolato nello stato EX
-  - La decisione del branch è presa nello stato MEM producando un segnale di controllo
+  - Il branch target PC è calcolato nello stage EX
+  - Il risultato della branch è noto nello stage EX dall'ALU
+  - La decisione del branch è presa nello stage MEM producendo un segnale di controllo
+  
   Penalità: 3 cicli
+   - Alla fine della MEM stage, il target PC è nel registro PC
+   - Le stages IF, ID e EX devono essere messe in stallo mandando gli opportuni segnali di controllo
+   - Questo è vero sia per branches condizionali e incondizionali
   
   ![e45b6b94.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/e45b6b94.png)
   
@@ -95,28 +152,41 @@ content: '''
   ##### scenario 3
   Anticipo la decisione dello stadio ID (early branch execution)
   - Il target PC è conoscuto dello stadio ID
+  - Per la fine della stage ID, il target PC è nel registro PC
   - Penalità 1
   
   ![55fbc6ea.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/55fbc6ea.png)
   
-  **NOTA**: un ciclo di penalità è ancora troppo: la probabilità di avere una istruzione di branch è molto alta, specialmente considerando la programmazione orientata agli oggetti. Inoltre non è detto che sia sempre possibile anticipare la decisione del PC al secondo stadio in pipeline più complesse
+  **NOTA**: un ciclo di penalità è ancora troppo: la probabilità di avere una istruzione di branch è molto alta, specialmente considerando la programmazione orientata agli oggetti, dove l'ereditarietà implica molti branches nel codice. Inoltre non è detto che sia sempre possibile anticipare la decisione del PC al secondo stadio in pipeline più complesse, inducendo così una penalty di misprediction più alta.
+   - In realtà però, aggiungere nuova logica hardware (e.g branch predictor) non ci costa poi così tanto, data la possibilità di avere chips molto densi.
   
   ### Branch Prediction
   Viene fatto un guess sul risultato della comparazione. Se sbagliata, il risultato è scartato, è giusta, non fa nulla.
   
   ##### Static branch prediction
   - Prendo un path di default (eg true)
-  - Compiler-based (o user-assisted)
+  - La predizione è fatta a priori rispetto all'esecuzione
+  - Compiler-based (o user-assisted).
+    - E.g. `likely` nel codice sorgente del kernel; `0x2e,0x3e` per il Pentium 4 
   - BTFN (backward taken, forward not taken)
+    - Basato sull'intuizione che i loop sono più probabili
+    - Utilizzato nel Pentium 4 come branch predictor di fallback
   
   ##### Dynamic branch prediction
+  - La previsione è fatta durante l'esecuzione e può cambiare a seconda di come il comportamento delle branches cambia
+  - Hardware-based
+    - E.g. prevedi il branch come preso se è stato preso precedentemente
+  
+  Nel seguito discuteremo approcci dinamici
+  
   - Chiedi al predittore hardware se un branch sarà preso o meno
     - Basato tipicamente sulla conoscenza delle vecchie predizioni (branch history)
+    - Carica la prima istruzione dell'edge predetto
   - Se la predizione è sbagliata
     - Aggiorna la branch history per influenzare le predizioni future
     - _butta_ tutte le istruzioni dopo il branch
-    - Carica la prima istruzione corretta
-  - La penalità dipende dalla pipeline, i.e., da dove la predizione è fatta e da dove la predizione è verificata
+    - Carica la prima istruzione dell'edge corretto
+  - La penalità dipende dalla profondità della pipeline, i.e., da dove la predizione è fatta e da dove la predizione è verificata
   ---
   - Assumiamo una pipeline MIPS con le seguenti caratteristiche:
     - Il target branch PC è calcolato nello stadio ID
@@ -128,55 +198,101 @@ content: '''
     - La predizione può essere invocata prima di EX
     - Alla fine di MEM, conosciamo il reale prossimo PC
   
+  - Se la previsione è branch presa, allora:
+    - Libera l'istruzione di fall-through dalla pipeline
+    - Carica la prima istruzione dell'edge predetto
+  
   - Penalità se la predizione è scorretta:
     - 3 cicli (uguale se non abbiamo branch prediction)
   - Penalità se la predizione è corretta:
     - 1 se taken (perché il fall-through è fallito e quindi la prossima istruzione va flushata)
     - 0 se not-taken (il fall-though è andato a buon fine)
   
-  **NOTA** il branch predictor non può essere attivato prima di sapere che è una branch, quindi prma di ID. Devo necessariamente avere un fall-though.
+  **NOTA** il branch predictor non può essere attivato prima di sapere che è una branch, quindi prima di ID. Devo necessariamente avere un fall-though.
   **NOTA** stiamo considerando la pipeline in cui la decisione viene presa in MEM, quindi lo _scenario 1_ di prima.
   
   ### One-level 1-bit Predictor
   ![ebe0ad00.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/ebe0ad00.png)
-  - Utilizza una tabella chiamata _Branch Prediction Buffer (BPB)_. E' una memoria veloce per mantenere leinformazioni sulle predizioni indicizzata dai bit _meno significativi_ del PC.
-  - Ogni entry è di 1-bit: 1 se l'ultimo branch era taken, se c'è misprediction, il bit è flippato
-  - Se consideriamo un loop, sbaglierà solo la prima e l'ultima iterazione
+  - Utilizza una tabella chiamata _Branch Prediction Buffer (BPB)_. E' una memoria veloce per mantenere le informazioni sulle predizioni indicizzata dai bit _meno significativi_ del PC delle branch condizionali.
+  - Ogni entry è di 1-bit: 1 se l'ultimo branch era taken; se c'è misprediction, il bit è flippato
+  - Se consideriamo un loop, sbaglierà la prima (not taken, but actually taken) e l'ultima iterazione (taken but actually not taken)
   - Per loop nested, problema: convergerà su 2 errori per ogni esecuzione del loop più esterno
   
   ![bc0788d2.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/c31ce01d.png)
   ### One-level 2-bit Predictor (Smith Algorithm)
   ![63df8ca4.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/63df8ca4.png)
   - Due errori devono essere commessi prima di cambiare una predizione
-  - Si può estendere a n-bit con $2^n-1$ stati. Trade-off 
+  
+  Ovviamente con 2-bit riesco a codificare tutti gli stati:
+   - Strong Taken (11)
+   - Weak Taken (10)
+   - Weak Not Taken (01)
+   - Strong Not Taken (00)
+  
+  Si può estendere a n-bit con $2^n-1$ stati.
+    - La prima metà corrisponde a stati "not taken" con confidenza decresente
+    - La seconda metà corrisponde a stati "taken" con confidenza crescente
+  
+  Ma aumentando la storia ho benefici? 
+  In realtà aumentando il numero di bit impatta su questo oggetto anche in maniera negativa, visto che vado ad introdurre troppa inerzia nel cambiamento della prediction.
+  
+  - 2-bit predictor schemes usano solo il comportamento recente di una branch per predirne il cambiamento futuro
+  - L'accuratezza della previsione potrebbe migliorare anche considerando:
+    - Patterns che si ripetono sulla stessa branch
+    - Gli outcomes recenti di altre branches (possibilmente correlate)
+  
   
   ### Two-level Predictor
   Utilizzo due info:
   - Una global (pattern che trovo nel processo attuale)
   - Una locale (i 2-bit di prima)
   
+  Infatti un two-level predictor è un (m,n) correlating predictor che usa le ultime m osservazioni per scegliere da $2^m$ branch predictors
+    - Ciascun predictor è strutturato come un one-level n-bit predictor
+  
+  Un History Register (HT) è usato per contenere le ultime m osservazioni
+    - È di fatto uno schift register, dove l i-esimo bit registra l'outcome dell'i-esima osservazione
+  
+  Può essere combinato con il BPB, formando la Pattern History Table (PHT)
+    - L'HT è usata per scegliere da $2^m$ BPBs
+    - Una BPB singola è indicizzata ancora usando il PC delle branches
+  
   #### Two-level Global Prediction
-  - Utilizza registro BHT (branch history taken), shift register. Le ultime m osservazioni vengono da qualsiasi branch. Rappresenta un path della più recente parte del programma. 
+  - Utilizza un Global History Register/Table (GHT), shift register. Le ultime m osservazioni vengono da qualsiasi branch. Rappresenta un path della più recente parte del programma. 
   ![6dd20f4d.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/6dd20f4d.png)
-  - I dati della BHT sono combinati con quelli del PC per spiazzarsi nella PHT (pattern history table)
+  - I dati del GHT sono combinati con quelli del PC per spiazzarsi nella PHT (pattern history table)
   ![c00fa2ae.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/c00fa2ae.png)
   #### Two-level Local Prediction
-  - Invece di avere un'unica BHT, ho un array di BHT che spiazzo usando PC. Combino questo BHT con il PC per spiazzarmi in PHT (come prima)
+  - Invece di avere un'unica GHT, ho un array di Local History Registers (LHTs) che spiazzo usando PC. Combino questo LHT con il PC per spiazzarmi in PHT (come prima)
+    - Le ultime m osservazioni vengono dalla stessa branch
+    - Rappresenta una nozione di self-correlation
+  
+  - Se abbastanza grande può predirre perfettamente patterns periodici (e.g. loops con un numero fissato di iterazioni)
   ![17c393ea.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/17c393ea.png)
   
   #### Tournament Predictor
   - Combina il Local e il Gloabl predictor di sopra
+  - Un selettore ha la responsabilità di scegliere la previsione migliore
+    - Tipicamente si tratta di un 2-bit saturating counter che cambia l'identità del predictor da utilizzare dopo due errori
   - Misprediction stimata: 0.7-1.0%
   
-  ## Branch-Table Buffer
+  ## Branch-Target Buffer
   - Fin'ora non ci siamo preoccupati di capire la destinazione di una branch, ma solo se questa viene presa o meno (eg `ret`, `jmp eax`).
   - La Branch-Tale Buffer (BTB) può predirre anche la destinazione di una branch
   - Tipicamente, è invocata durante IF della pipeline
+    - È utile per ridurre la penalità di predizione in caso di branch condizionali
+    - È utile anche in caso di branch unconditional (e.g. `jmp *%rax` or `ret`)
   - E' implementata come una cache indicizzata da tutto il PC
-  - Si può implementare BPB + BTB durante la fase IF. In questo modo abbiamo sia predizione dell'outcome che predizion del target
+    - Ciascuna entry ha (almeno) una campo per il branch target predetto
+    - Se una hit ha luogo, il PC successivo è fetchato da questa cache
+  - Perchè l'intero PC è usato come index, a differenza delle history tables?
+    - Per evitare che le istruzioni fetchata vengano scambiate erroneamente come branch instructions
+    - Se l'istruzione si trova in questa table è una branch
+    - La penalità per un match scorretto è almeno 1 ciclo (la prossima istruzione fetchata è quella predetta invece di quella successiva)
+  - Si può implementare BPB + BTB durante la fase IF. In questo modo abbiamo sia predizione dell'outcome che predizione del target
   - Basta salvare i branch taken: per i not-taken il fall-though va bene! (prendo la prossima istruzione)
-  - misprediction: me ne accorgo in MEM
-  - good prediction: penalità 0 (perché agisco durante IF)
+  - misprediction, i.e. la branch predetta non viene presa: durante la fase MEM dobbiamo rimuovere la rispettiva entry dalla table
+  - good prediction in caso di branch taken: penalità 0 (perché agisco durante IF) invece che 1
   
   **NOTA**: posso agire durante la IF perché se trovo l'indirizzo dell'istruzione nella BTB, allora so per certo che è un branch!
   ![4ddefade.png](:storage/4d1d2596-40d1-40ee-96be-5c008cb7e853/4ddefade.png)
@@ -187,7 +303,10 @@ content: '''
     - Push su function call
     - Pop on function return
   - L'accuratezza è perfetta per regolari coppie call/return
+    - Returns tipicamente ritornano all'ultima call instruction
+    - Se profondo abbastanza può rispecchiare l'intero call stack
   - Inadeguato per control-flow non convenzionali
+    - E.g. alcune implementazioni di `setjump/longmp`
 '''
 linesHighlighted: []
 isStarred: false
