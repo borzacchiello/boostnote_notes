@@ -1,0 +1,99 @@
+createdAt: "2019-03-14T13:26:37.092Z"
+updatedAt: "2019-03-14T15:04:37.596Z"
+type: "MARKDOWN_NOTE"
+folder: "7180c251cc0f0c61d2d1"
+title: "2 - Data Dependencies"
+tags: []
+content: '''
+  # 2 - Data Dependencies
+  
+  Se potessimo dispatchare più unità contemporaneamente, l'ordine relativo delle istruzioni potrebbe cambiare.
+  ![5e5d35c4.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/5e5d35c4.png)
+  **NOTA**: la dipendenza è una proprietà del programma, gli hazard sono quello che viene generato dalle dipendenze ma dipendono dall'organizzazione della pipeline.
+  
+  _RAW_ è detta _true dependency_. Se abbiamo una dipendenza _RAW_ non possiamo riordinare le istruzioni ma dobbiamo necessariamente _stallare_ la CPU.
+  _WAW_ e _WAR_ sono _false dependencies_. Si possono evitare _rinominando_ i registri che coinvolgono l'hazard. 
+  EX - WAW risolta _rinominando_ il registro:
+  ![4ee00c7a.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/4ee00c7a.png)
+  
+  Considerando una _RAW_:
+  - l'update del registro è fatto nella fase di Write-Back (WB)
+  - può essere prodotto:
+    - durante la fase di Execution (EX) se è una operazione aritmetica 
+    - durante MEM se è una load da memoria
+  
+  in questo scenario, la penalità è di 2 cicli. Perché la CPU viene stallata da ID (momento nel qualche la pipeline si rende conto che il valore su cui deve scrivere sta venendo letto da qualcun altro) fino alla fase di WB
+  
+  ### Forwarding
+  [Forwarding](http://web.cs.iastate.edu/~prabhu/Tutorial/PIPELINE/forward.html)
+  Per ridurre la penalità, possiamo implementare uno schema basato sul forwarding:
+  - Il dato viene passato non appena è disponibile _prima_ di essere disponibile nel register file (WB)
+  
+  ##### EX/EX forwarding
+  - Il collegamento tra EX e MEM fornisce il risultato al prossimo stadio EX
+  - Risolve il caso di operazioni aritmetiche a distanza 1
+  ##### MEM/EX forwarding
+  - Il collegamento tra MEM e WB fornisce il valore per il prossimo stadio EX
+  - Risolver il caso di operazioni aritmetiche a distanza 2
+  ##### MEM/MEM forwarding
+  - Il collegamento MEM/WB fornisce il valore per il prossimo statio MEM
+  - Risolver il caso di load seguite da load/store
+  ![28cbc3b9.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/28cbc3b9.png)
+  
+  #### Limitazioni MIPS
+  ##### Load-use data hazard
+  ![e5c87fcb.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/e5c87fcb.png)
+  - Una load in WB non può essere forwardata verso una operazione non in memoria in EX
+  - Stallo 1 ciclo
+  - Perché il risultato della load ce l'ho in MEM, mentre una operazione aritmetica ha bisogno del valore in EX
+  
+  ##### Early branch data hazard
+  ![063677ed.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/063677ed.png)
+  - Una non-load in MEM non può essere forwardata verso un early branch in ID
+  - Stallo 1 ciclo
+  - Perché la branch ha bisogno del risultato della non-load per capire quale branch prendere
+  
+  ##### Load-use data hazard + Early branch data hazard
+  ![13d7be31.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/13d7be31.png)
+  - Una load in WB non può essere fowardata verso un early branch in ID
+  - Stallo 2 cicli
+  - Perché la branch ha bisogno del risultato della load per capire quale branch prendere
+  
+  ### Instruction scheduling
+  Provo a riordinare le istruzioni mantenendo le dipendenze di data-flow
+  - **Static instruction scheduling**
+    - Compiler-assisted (non discusso)
+  - **Dynamic instruction scheduling**
+    - Hardware-assisted
+  
+  ---
+  ### Dynamic instruction scheduling
+  ![e48fdc00.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/e48fdc00.png)
+  Una pipeline _in-order_ esegue le istruzioni usando l'ordine del programma
+  Una pipeline _out-of-order_ può rilassare questa assunzione:
+  - Le istruzioni sono fetchate e decodificate in-order (in-order issue)
+  - Le istruzioni sono eseguite out-of-order (out-of-order execution)
+  - Le istruzioni possono completare out-of-order (out-of-order commit) (? differenza con immagine che ha fatto in aula)
+  
+  5 stadi principali:
+  - **Fetch**: carica istruzioni da una coda
+  - **Issue**: decodifica le istruzioni, verifica se ci sono hazard strutturali o sui dati
+  - **Read**:  aspetta eventuali data-hazards, poi leggi gli operandi
+  - **Execute**: esegui l'istruzione sull'unità funzionale disponibile
+  - **Write Result**: Scrivi i risultati in memoria e/o in un register file
+  
+  I data hazard che possono verificarsi sono _RAW_, _WAW_ e _WAR_, come discusso prima.
+  
+  Due tecniche principali per l'esecuzione out-of-order:
+  - **Scoreboarding**
+    - Esegue out-of-order quando non ci sono hazard sui dati o strutturali
+    - False dependencies trattate come True dependencies (stallando)
+  - **Tomasulo Algorithm**
+    - False dependencies eliminate
+  
+  ## Tomasulo's Algorithm
+  // TODO
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false
