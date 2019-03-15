@@ -1,5 +1,5 @@
 createdAt: "2019-03-14T13:26:37.092Z"
-updatedAt: "2019-03-14T15:04:37.596Z"
+updatedAt: "2019-03-15T11:49:59.297Z"
 type: "MARKDOWN_NOTE"
 folder: "7180c251cc0f0c61d2d1"
 title: "2 - Data Dependencies"
@@ -92,7 +92,90 @@ content: '''
     - False dependencies eliminate
   
   ## Tomasulo's Algorithm
-  // TODO
+  [YouTube](https://www.youtube.com/watch?v=jyjE6NHtkiA)
+  ![d1110263.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/71b82ca7.png)
+  ![af90959a.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/11d6e4c9.png)
+  ![e983cc97.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/56ef1801.png)
+  Sviluppato da un ingegnere della IBM. L'obiettivo era quello di avere buone performance sulle opeazioni sui floating-point considerando che:
+  - L'architettura dell'epoca (IBM 360) aveva solo 4 registri per i floating-point (FP), i.e., riutilizzo dei registri molto frequente -> False Dependencies
+  - Accessi a memoria lenti, operazioni su FP onerose
+  
+  L'algoritmo di Tomasulo risolve questi problemi:
+  - Il numero limitato di registri è espanso usando "register renaming"
+  - I lunghi delay sono mascherati utilizzando processamenti out-of-order
+  
+  **NOTA**: Il common data bus (CDB) è la chiave del funzionamento dell'algoritmo: è il mezzo di comunicazione che connette ogni componente.
+  ##### Fetch and Issue
+  - Una Instruction Queue (IQ) mantiene le istruzioni fetchate
+  - Le istruzioni lasciano la IQ in ordine di programma (mantenendo dipendenze di controllo e sui dati)
+  - Non appena lascia la IQ, l'istruzione viene decodificata
+    - La functional unit corretta viene scelta per processare l'istruzione. Se la functional unit è occupata, stallo la IQ (structural hazard)
+    - Il Register File (RF) è acceduto in modalità read/write (per prendere i parametri e per notificare il RF quali registri saranno scritti)
+  
+  - Ogni unità funzionale ha una o più Reservation Station (RS)
+    - Un singola RS mantiene una istruzione con i suoi operandi da leggere
+    - Si preoccupa delle True Data Dependencies per quella istruzione
+    - Se il dato non è disponibile (perché sta venendo processato da un'altra RS), viene mantenuto l'ID della RS che produrrà il risultato
+  
+  ##### Read and execute
+  - Una volta dispatchate, le istruzioni attendono nelle Reservation Stations di fronte alle unità funzionali (in figura sono 2: una per moltiplicare i FP, una per dividerli).
+    - Aspettano la disponibilità degli operandi derivanti da istruzioni concorrnti che causano data dependencies
+  - La RS monitora i risultati che sono prodotti da tutte le unità funzionali usando il Common Data Bus (CDB). Non appena un operando è disponibile, il risultato viene scritto nella RS.
+  - Quando tutti gli operandi sono disponibili per una istruzione, questa può essere processata. Se più RS sono pronte, prendine una
+  
+  ##### Write Result
+  - Notifica la produzione di un risultato annunciandolo sul CDB (se disponibile)
+    - Le RS che aspettavano il risultato lo ricevono nel prossimo ciclo CPU (1-clock latency)
+  - Libera la RS che contiene l'istruzione completata
+  - Salva il risultato nel RF (che ascolta sul CDB)
+  
+  ##### Memory hazards
+  Le load e le store possono essere fatte out-of-order ma solo se si riferiscono a indirizzi diversi
+  - Le load devono aspettare le store verso lo stesso indirizzo
+  - Le store devono aspettare le load e le store verso lo stesso indirizzo
+  
+  Per stabilire la presenza di un memory hazard, l'Effective Address (EA) di ogni load/store deve essere noto. 
+  L'indirizzo è calcolato dopo aver valutato una espressione, e.g. in x86 `MOV %eax, TAB(%ecx, $4)`.
+  
+  **NOTA** Per produrre un EA bisogna aspettare che i valori dei registri sono disponibili. Ma che succede se una store precede una load nel programma con lo stesso EA, ma la computazione dell'EA della load viene prima di quello della store?
+  
+  ##### Load/Stores
+  - Utilizzo di buffer appositi per il calcolo delgli EA
+    - Ogni buffer mantiene le componenti degli EA finche il calcolo non è completato
+    - Una volta completato il calcolo, eventuali memory hazard sono verificati (stall possibile)
+    - Load/Store lasciano il buffer in program order
+  - Le load fanno un check di memory hazard nello store buffer:
+    - Se non ci sono conflitti, procede a un load buffer
+    - Altrimenti, aspetta che la store completi (oppure la store fa il forward del valore, se conosciuto)
+  - Le store fanno un check di memory hazard nei load e store buffers
+  
+  **NOTA** concettualmente, i Load e Store buffers sono come delle Reservation Stations.
+  
+  ##### Register Renaming
+  - Rimpiazzare gli operandi con gli ID della RS è una forma di _register renaming_
+  - Questo evita di dover gestire WAW e WAR hazards
+  
+  **NOTA** Lo schema di Tomasulo rechiede un hardware complesso (RS e CDB) ma è stato molto utilizzato per via della sua flessibilità.
+  **NOTA** In uno schema out-of-order, le eccezioni possono essere lanciate out-of-order. Però questo non deve permettere che eccezioni appartenenti a diversi execution path siano lanciate per via di esecuzioni speculative non corrette.
+  
+  ##### Branches
+  Non si possono riordinare istruzioni che appartengono a branch diversi:
+  - Possono creare data dependencies dovute al riordinamento
+  - E' possibile che vengano lanciate eccezioni su branch che non sono stati presi (ma solo speculativi)
+  
+  Nell'algoritmo di Tomasulo, dobbiamo stallare la CPU se ci sono control dependencies:
+  - Le istruioni dopo un branch di cui non si sa l'outcome sono stallate nello stadio Issue
+  - Una volta che l'outcome è noto, si può ricominciare sul branch taken (possibilmente flushando delle istruzioni dall'Instruction Queue IQ)
+  
+  ##### Hardware-based speculation
+  Richiede una modifica significativa all'algoritmo di Tomasulo
+  Esecuzione delle istruzioni prima che l'outcome di un evento è noto:
+  -  Specula sull'outcome di un evento (predizione dei branch)
+  -  Esegui istruzioni speculativamente come se fossero corrette
+  -  Se la speculazione era sbagliata, fai rollback
+  
+  ##### Tomasulo + speculation
+  
 '''
 linesHighlighted: []
 isStarred: false
