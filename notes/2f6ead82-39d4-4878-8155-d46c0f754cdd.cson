@@ -1,5 +1,5 @@
 createdAt: "2019-03-14T13:26:37.092Z"
-updatedAt: "2019-03-15T11:49:59.297Z"
+updatedAt: "2019-03-15T14:17:47.280Z"
 type: "MARKDOWN_NOTE"
 folder: "7180c251cc0f0c61d2d1"
 title: "2 - Data Dependencies"
@@ -174,7 +174,67 @@ content: '''
   -  Esegui istruzioni speculativamente come se fossero corrette
   -  Se la speculazione era sbagliata, fai rollback
   
-  ##### Tomasulo + speculation
+  ## Tomasulo + speculation
+  ![c1bdcf57.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/c1bdcf57.png)
+  
+  Lo stadio **Write Result** diventa speculativo
+  - Usare il risultato preso dal CDB significa fare una read speculativa
+  - L'istruzione che ha prodotto il risultato potrà fare rollback in futuro
+  - Tutto le istruzioni che usano quel risultato dovranno fare rollback
+  
+  Un nuovo stadio **Commit** in-order viene introdotto
+  - Il register file e la memoria sono modificato in questo stadio
+  - Le eccezioni sono lanciate in questo stadio
+  
+  Un **Re-Order Buffer (ROB)** salva i risultati delle istruzioni speculative
+  ![9a2b3681.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/9a2b3681.png)
+  - Le istruzioni possono terminare molto prima dello stadio Commit
+  - Ogni istruzione ha una posizione nel ROB fiché non fa commit. Se non c'è spazio, stallo (structural hazard)
+  - Il register renaming è ora fatto tramite la ROB. Ora gli operandi nelle RS possono riferirsi a entry nella ROB invece di entry in altre RS
+  
+  #### Commit
+  Rimuovi istruzioni dal ROB in ordine di programma (in-order completion!)
+  Guarda l'istruzione successiva nel ROB:
+  - Verifica se è pronta per il commit
+  - Se è stata mispredicted, flush dell'intera ROB
+  - Se è una store, scrivi in memoria
+  - Altrimenti scrivi sul register file
+  - Se genera una eccezione, lancia
+  
+  #### Loads/Stores
+  WAW e WAR sono eliminati con la speculazione: infatti, l'update della memoria avviene in-order con la ROB
+  RAW sono gestite in modo simile a prima:
+  - calcolo la EA di ogni load/store in program order
+  - se una load è in conflitto con una store nel ROB, devo aspettare che la store finisca (oppure faccio forward del valore dalla store)
+  - se non è in conflitto con una store nel ROB, può avvenire prima della store (lo faremo dopo (?))
+  Si possono implementare altre ottimizzazioni: e.g. assumo che due EA saranno diverse, in seguito verifico questa assunzione
+  
+  ## Architetture moderne
+  Il renaming è implementato tramite un Rename Register File (RRF) fisico. Mapping tra ISA registers e nomi
+  Un esplicito Store Buffer (SB) è usato per le store
+  Il ROB è utilizzato solo per avere commit in-order
+  
+  ## Deep Pipelining
+  In una pipeline corta, il rateo di clock è limitato dallo stadio più lento. Lunghi stadi possono essere splittati in multipli stadi più corti.
+  - Ho più clock speed
+  - Ho più latenza per le singole istruzioni (CPI più alto)
+  - L'aumento di clock speed deve essere maggiore dell'aumento del CPI per avere senso
+  
+  Avere una pipeline con molti stadi è un problema, il limite è tipicamente 10-15. Altrimenti:
+  - Troppi stalli
+  - Aumento eccessivo delle dimensioni per via di pipeline registers addizionali
+  - Pipeline overhead (Input stabilization time, Clock skew)
+  - Aumento del consumo di potenza
+  
+  ## Superscalari
+  ![295e50cd.png](:storage/2f6ead82-39d4-4878-8155-d46c0f754cdd/295e50cd.png)
+  Fin'ora abbiamo visto tecniche che portano il CPI verso 1
+  - Speculation per mascherare gli stalli dovuto alle control dependencies
+  - Out-of-order execution per mascherare gli stalli dovuto alle data dependencies
+  
+  Però, non possiamo andare meglio di 1
+  I superscalari (1990s) hanno unità funzionali ridondanti che possono operare in parallelo.
+  
   
 '''
 linesHighlighted: []
