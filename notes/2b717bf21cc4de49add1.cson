@@ -1,5 +1,5 @@
 createdAt: "2018-02-12T10:20:08.395Z"
-updatedAt: "2018-04-24T09:55:48.152Z"
+updatedAt: "2019-03-23T09:24:33.953Z"
 type: "MARKDOWN_NOTE"
 folder: "624499bc0700af893dfe"
 title: "grep"
@@ -27,6 +27,10 @@ content: '''
   `grep --exclude-dir={dir1,dir2,*.dst} -rnw '/path/to/somewhere/' -e "pattern"`
   This works very well for me, to achieve almost the same purpose like yours.
   
+  `grep -A 3`: get three line after
+  `grep -B 3`: get three line before
+  `grep -C 3`: get three line after and before
+  
   For more options check man grep.
   
   
@@ -34,3 +38,4 @@ content: '''
 tags: []
 isStarred: false
 isTrashed: false
+linesHighlighted: []

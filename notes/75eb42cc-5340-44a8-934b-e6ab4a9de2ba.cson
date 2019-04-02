@@ -1,0 +1,15 @@
+createdAt: "2019-04-02T12:13:58.688Z"
+updatedAt: "2019-04-02T13:05:07.741Z"
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "PIC and PIEs"
+tags: []
+content: '''
+  # PIC and PIEs
+  
+  [Technovelty - Position Independent Code and x86-64 libraries](https://www.technovelty.org/c/position-independent-code-and-x86-64-libraries.html)
+  [Position Independent Code (PIC) in shared libraries - Eli Bendersky's website](https://eli.thegreenplace.net/2011/11/03/position-independent-code-pic-in-shared-libraries/)
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

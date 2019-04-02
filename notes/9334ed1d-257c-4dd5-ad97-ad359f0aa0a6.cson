@@ -1,0 +1,68 @@
+createdAt: "2019-03-23T09:34:03.999Z"
+updatedAt: "2019-03-23T09:50:14.313Z"
+type: "MARKDOWN_NOTE"
+folder: "d5841d5890db3062d38d"
+title: "Anti-Debug Linux"
+tags: []
+content: '''
+  # Anti-Debug Linux
+  
+  ### 1
+  prob su proc: `/proc/self/status`
+  entry con `TracerPid:` in status. Se c'è -> debugger
+  
+  ### 2
+  invoco `ptrace(PTRACE_TRACEME, 0, 0, 0)`, se fallisce: qualcuno si è attaccato
+  
+  ### 3
+  ``` C
+  static void _sigtrap_handler(int signum)
+  {
+    print("Oops... My secret world...\\n");
+  }
+  int main(void)
+  {
+    signal(SIGTRAP, _sigrap_handler);
+    __asm__("int3");
+    printf("HelloWorld");
+    
+    return 0;
+  }
+  ```
+  codice nascosto nell'handler di una eccezione. I debugger, per come sono configurati, potrebbero non gestire l'eccezione.
+  eg. gdb gestisce la SIGTRAP senza passarla all'applicazione a meno di settarlo manualmente
+  
+  ### 4
+  ``` C
+  int detect_gdb_env(char **envp)
+  {
+    char *p = getenv("_"); // parent di chi mi ha lanciato
+    if (!strncmp("/usr/bin/gdb", p, 12))
+    {
+      return 1;
+    }
+    return 0;
+  }
+  ```
+  controllo se mi ha spawnato gdb
+  
+  ### 5
+  ``` C
+  int detect_gdb_env(char **envp)
+  {
+    char **p;
+    for (p = envp; *p |= NULL; ++p)
+    {
+      int lines = (strncmp("LINES", *p, 5));
+      int columns = (strncmp("COLUMNS", *p, 7));
+      if (lines == 0 || columns == 0)
+        return 1;
+    }
+    return 0;
+  }
+  ```
+  gdb setta linee e/o colonne a zero (grandezza terminale). Dipende dalla configurazione del sistema, ma su sistemi default spesso funziona.
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

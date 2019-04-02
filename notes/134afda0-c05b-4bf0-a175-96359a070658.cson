@@ -1,0 +1,48 @@
+createdAt: "2019-03-23T08:59:13.730Z"
+updatedAt: "2019-03-23T09:29:36.836Z"
+type: "MARKDOWN_NOTE"
+folder: "d5841d5890db3062d38d"
+title: "ELF format"
+tags: []
+content: '''
+  # ELF format
+  
+  ![4e8316c0.png](:storage/134afda0-c05b-4bf0-a175-96359a070658/4e8316c0.png)
+  
+  Linking view: visione su disco, legata alle sezioni
+  Execution view: visione in memoria, legata ai segmenti
+  
+  NOTA: le sezioni non sono in memoria!
+  NOTA: un segmento può contenere una o più sezioni. 
+  
+  ``` bash
+  > readelf -a binary/path
+  ```
+  
+  ### Pipeline ELF
+  _glibc_start_main ha tre puntatori a funzione: main, costruttore, distruttore
+  
+  NOTA: il costruttore è eseguito prima del main. Se è definito, può essere usato per sviare l'analisi
+  
+  ``` C
+  #include <stdio.h>
+   
+  void begin (void) __attribute__((constructor));
+  void end (void) __attribute__((destructor));
+   
+  int main (void) {
+    printf ("\\nInside main ()");
+  }
+   
+  void begin (void) {
+    printf ("\\nIn begin ()");
+  }
+   
+  void end (void) {
+    printf ("\\nIn end ()\\n");
+  }
+  ```
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

@@ -1,5 +1,5 @@
 createdAt: "2018-10-02T08:34:29.144Z"
-updatedAt: "2018-10-02T08:52:23.425Z"
+updatedAt: "2019-04-01T09:26:21.642Z"
 type: "MARKDOWN_NOTE"
 folder: "624499bc0700af893dfe"
 title: "Linux system calls convetion"
@@ -8,12 +8,17 @@ content: '''
   ### Kernel Interface
   x86-32 Linux System Call convention:
   
-  In x86-32 parameters for Linux system call are passed using registers. %eax for syscall_number. %ebx, %ecx, %edx, %esi, %edi, %ebp are used for passing 6 parameters to system calls.
+  In `int 0x80 interface` parameters for Linux system call are passed using registers. %eax for syscall_number. %ebx, %ecx, %edx, %esi, %edi, %ebp are used for passing 6 parameters to system calls.
   
   The return value is in %eax. All other registers (including EFLAGS) are preserved across the int $0x80.
   
   [Linux/i386 system calls](http://asm.sourceforge.net/syscall.html)
+  
+  In `syscall interface`, rax is used for the syscall number and rdi, rsi, rdx, r10, r8, and r9 for the parameters.
+  
+  [syscall list x64](http://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
 '''
 tags: []
 isStarred: false
 isTrashed: false
+linesHighlighted: []

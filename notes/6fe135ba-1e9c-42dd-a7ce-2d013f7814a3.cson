@@ -1,0 +1,48 @@
+createdAt: "2019-03-25T13:39:30.500Z"
+updatedAt: "2019-03-25T13:43:11.337Z"
+type: "MARKDOWN_NOTE"
+folder: "d5841d5890db3062d38d"
+title: "pwnlib"
+tags: []
+content: '''
+  # pwnlib
+  
+  ##### LD_PRELOAD: wrap fopen, fread, fclose
+  ``` python
+  from pwn import *
+  
+  context.arch = 'amd64'
+  sc  = '.globl fopen, fread, fclose\\n'
+  sc += 'ret\\n' # __start function
+  sc += 'fopen:  mov rax, 1; ret\\n'
+  sc += 'fread:  mov DWORD PTR [rdi], 0; mov rax, 1; ret\\n'
+  sc += 'fclose: ret\\n'
+  solib = make_elf_from_assembly(sc, shared=1)
+  
+  binary = './input'
+  
+  arguments = []
+  environment = dict()
+  environment['LD_PRELOAD'] = solib
+  
+  p = process([binary] + arguments, env=environment)
+  ```
+  
+  ##### custom pipe on stderr
+  ``` python
+  from pwn import *
+  import os
+  
+  r, w = os.pipe() 
+  r_pipe = os.fdopen(r, 'r')
+  [...]
+  p = process([binary] + arguments, env=environment, stderr=r_pipe)
+  print p.recv()
+  p.send(stdin_str)
+  os.write(w, stderr_str)
+  print p.recv()
+  ```
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

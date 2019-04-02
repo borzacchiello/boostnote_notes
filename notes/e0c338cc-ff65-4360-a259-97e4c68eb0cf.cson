@@ -1,0 +1,36 @@
+createdAt: "2019-04-02T14:06:00.052Z"
+updatedAt: "2019-04-02T14:06:13.827Z"
+type: "SNIPPET_NOTE"
+folder: "624499bc0700af893dfe"
+title: "find base address"
+tags: []
+description: "find base address"
+snippets: [
+  {
+    linesHighlighted: []
+    name: "file.c"
+    mode: "C"
+    content: '''
+      #include <stdio.h>
+      
+      int main() {
+              int i;
+              unsigned long main_addr = (unsigned long)&main;
+              printf("main addr: %p\\n", (void*)main_addr);
+              unsigned char* base;
+              for (i=1; i<15; ++i) {
+                      base = (unsigned char*)((main_addr & 0xFFFFFF00) - (i<<8));
+                      printf("trying %p...\\n", base);
+                      if (base[0] == 0x7f && base[1] == 'E' && base[2] == 'L' && base[3] == 'F') {
+                              printf("I'm at %p\\n", base);
+                              break;
+                      }
+              }
+              return 0;
+      }
+      
+    '''
+  }
+]
+isStarred: false
+isTrashed: false

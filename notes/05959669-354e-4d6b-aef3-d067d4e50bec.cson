@@ -1,0 +1,17 @@
+createdAt: "2019-04-01T09:21:44.447Z"
+updatedAt: "2019-04-01T09:21:49.150Z"
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "permissions"
+tags: []
+content: '''
+  # permissions
+  
+  r = 4
+  w = 2
+  x = 1
+  
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

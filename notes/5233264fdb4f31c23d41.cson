@@ -48,6 +48,8 @@ content: '''
   `addr2line 0x40123 -e /path/to/exe`: print the line of code which correspond to the address. The executable must have been compiled with debug info
   `netstat -natp`: list all open connections
   `du -h -d 1`: list disk memory usage of current folder (human-readable + recursive-depth=1)
+  `nm file`: list symbols from the object file
+  `strip -s file`: remove all symbols from the object file
   
   ---
   ##### tr
@@ -144,4 +146,5 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2018-09-29T12:54:50.076Z"
+updatedAt: "2019-03-23T10:22:32.031Z"
+linesHighlighted: []
