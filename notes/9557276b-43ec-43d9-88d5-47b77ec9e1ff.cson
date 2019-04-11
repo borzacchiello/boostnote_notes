@@ -1,0 +1,35 @@
+createdAt: "2019-04-11T13:23:26.519Z"
+updatedAt: "2019-04-11T13:23:58.773Z"
+type: "SNIPPET_NOTE"
+folder: "1a74d4b87ffb3d65d815"
+title: "get push addresses"
+tags: []
+description: "get push addresses"
+snippets: [
+  {
+    linesHighlighted: []
+    name: "getchain.py"
+    mode: "Python"
+    content: '''
+      import idautils
+      
+      dism_addr = list(idautils.FuncItems(0x401000))
+      
+      chain = []
+      for addr in dism_addr:
+          m = GetMnem(addr)
+          if 'push' in m:
+              op = GetOpnd(addr, 0)
+              if 'offset' in op:
+                  OpHex(addr, 0)
+                  op = GetOpnd(addr, 0)
+              if 'h' in op:
+                  op = op[:-1]
+              chain.append('0x'+op)
+      
+      print chain[::-1]
+    '''
+  }
+]
+isStarred: false
+isTrashed: false
