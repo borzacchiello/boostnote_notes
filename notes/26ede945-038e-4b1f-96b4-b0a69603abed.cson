@@ -1,10 +1,13 @@
-createdAt: "2018-11-07T09:12:04.634Z"
-updatedAt: "2018-11-14T17:01:56.354Z"
+createdAt: "2019-05-06T17:49:46.943Z"
+updatedAt: "2019-05-06T17:50:04.254Z"
 type: "MARKDOWN_NOTE"
-folder: "0f90ad9dcffed499a199"
-title: "commands"
+folder: "77810edb34ca382924fc"
+title: "Docker"
+tags: []
 content: '''
-  # commands
+  # Docker
+  
+  ## commands
   - `docker image ls`: list images
   - `docker container ls`: list _active_ containers (with `-a` list all containers)
   - `docker rm %container_id%`: delete container with id=`%container_id%`
@@ -24,6 +27,6 @@ content: '''
   - `docker tag [image id] [username]/[image name]:[tag]`: tag the image
   - `docker push [username]/[image name]`: push the image
 '''
-tags: []
+linesHighlighted: []
 isStarred: false
 isTrashed: false

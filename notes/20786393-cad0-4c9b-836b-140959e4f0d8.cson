@@ -1,0 +1,25 @@
+createdAt: "2019-05-06T17:50:08.062Z"
+updatedAt: "2019-05-06T17:50:25.744Z"
+type: "MARKDOWN_NOTE"
+folder: "77810edb34ca382924fc"
+title: "Git"
+tags: []
+content: '''
+  # Git
+  
+  #### Remove a folder from history
+  - This is an example which removes node_modules from history
+  
+  ```
+  git filter-branch --tree-filter 'rm -rf node_modules' --prune-empty HEAD
+  git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+  echo node_modules/ >> .gitignore
+  git add .gitignore
+  git commit -m 'Removing node_modules from git history'
+  git gc
+  git push origin master --force
+  ```
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

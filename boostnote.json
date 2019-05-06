@@ -41,11 +41,6 @@
       "name": "C"
     },
     {
-      "key": "0f90ad9dcffed499a199",
-      "color": "#FF8E00",
-      "name": "Docker"
-    },
-    {
       "key": "4bd1a1b66665262390bf",
       "color": "#B013A4",
       "name": "ReverseEngineering"
@@ -64,6 +59,16 @@
       "key": "7180c251cc0f0c61d2d1",
       "color": "#3FD941",
       "name": "HPC"
+    },
+    {
+      "key": "d2ee926788bee118b060",
+      "color": "#2BA5F7",
+      "name": "Ghidra"
+    },
+    {
+      "key": "77810edb34ca382924fc",
+      "color": "#FF8E00",
+      "name": "Utility"
     }
   ],
   "version": "1.0"
