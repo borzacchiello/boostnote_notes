@@ -36,7 +36,6 @@ content: '''
   `sort namefile`: print on stdout the content of namefile with each lines in alphabetical order
   `find path -name filename`: find in path the file filename (also metacharacters allowed, such as \\* or .)
   `file filename`: info about filename
-  `du filename`: estimate space usage of filename
   `cal`: print the calendar
   `who`: info about the current shell
   `whoami`: my name
@@ -48,7 +47,11 @@ content: '''
   `addr2line 0x40123 -e /path/to/exe`: print the line of code which correspond to the address. The executable must have been compiled with debug info
   `netstat -natp`: list all open connections
   `du -h -d 1`: list disk memory usage of current folder (human-readable + recursive-depth=1)
+  `du filename`: estimate space usage of filename
+  `df`: disk usage
   `nm file`: list symbols from the object file
+  `nm -C file`: list symbols from the object file and demangle them
+  `nm -D file`: list dynamic symbols
   `strip -s file`: remove all symbols from the object file
   
   ---
@@ -91,6 +94,10 @@ content: '''
   `sed 's/Dear \\([^ ]*\\) .*$/Name = \\1/g'` substitute Dear _somename_ with Name = _somename_. Note that it is possible to refer to a matched substring with `\\1` when it is sorrounded by brackets `()`, if we have more blocks, than we can refer to blocks with `\\2`, `\\3`, ...
   `sed 's/world/hello &/g'` with `&` we can perform find-and-replace. The example will add hello just before world! (`&` refers to the matched substring).
   `sed 's/\\(world\\)/hello \\1/g'` is absolutely equivalent to the previous one.
+  ##### dd
+  Used to convert and copy files.
+  ex:
+  `dd if=input-file of=output-file bs=1 count=10296 skip=52`: copy 10296 bytes from `input-file` to `output-file` starting from the 52-nd byte.
   
   ---
   
@@ -146,5 +153,5 @@ tags: [
 ]
 isStarred: false
 createdAt: "2017-05-29T20:57:36.984Z"
-updatedAt: "2019-03-23T10:22:32.031Z"
+updatedAt: "2019-05-19T10:28:14.769Z"
 linesHighlighted: []
