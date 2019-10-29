@@ -1,5 +1,5 @@
 createdAt: "2018-01-15T12:51:30.518Z"
-updatedAt: "2018-05-06T18:06:54.287Z"
+updatedAt: "2019-09-06T07:04:49.564Z"
 type: "MARKDOWN_NOTE"
 folder: "4c8a94761a2196059488"
 title: "C tricks"
@@ -10,7 +10,7 @@ content: '''
   int main(int argc, char* argv[]) {
       // [...]
       char* cmd[] = { argv[1], argv[2], NULL };
-      // cmd contains the first 2 arguments of the executable!
+      // [...]
   }
   ```
   ##### ASM inline
@@ -33,7 +33,14 @@ content: '''
       return 0;
   }
   ```
+  
+  ##### stack string VS data string
+  ``` C
+  char a[] = "ciao";                  // "ciao" is in DATA
+  char b[] = {'c', 'i', 'a', 'o', 0}; // "ciao" is in STACK (only at runtime)
+  ```
 '''
 tags: []
 isStarred: false
 isTrashed: false
+linesHighlighted: []

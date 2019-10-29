@@ -1,0 +1,28 @@
+createdAt: "2019-08-20T08:11:59.175Z"
+updatedAt: "2019-08-20T08:20:29.665Z"
+type: "MARKDOWN_NOTE"
+folder: "624499bc0700af893dfe"
+title: "gdb snippets"
+tags: []
+content: '''
+  # gdb snippets
+  
+  #### read memory using python
+  ```
+  py i = gdb.inferiors()[0]
+  py print([chr(i.read_memory(0x555555768808 + k, 1).tobytes()[0]) for k in range(64)])
+  ```
+  
+  #### access regs in python
+  ```
+  py print(gdb.parse_and_eval("$rdi"))
+  ```
+  
+  #### define variable
+  ```
+  set $var = 3
+  ```
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

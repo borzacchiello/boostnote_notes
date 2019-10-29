@@ -1,5 +1,5 @@
 createdAt: "2019-05-06T17:49:46.943Z"
-updatedAt: "2019-05-06T17:50:04.254Z"
+updatedAt: "2019-07-30T09:59:16.530Z"
 type: "MARKDOWN_NOTE"
 folder: "77810edb34ca382924fc"
 title: "Docker"
@@ -12,7 +12,7 @@ content: '''
   - `docker container ls`: list _active_ containers (with `-a` list all containers)
   - `docker rm %container_id%`: delete container with id=`%container_id%`
   - `docker rmi %image_id%`: delete image with id=`%image_id%`
-  - `docker run --name=%name% %image% [command]`: crete container with name `%name%` from image `%image%`
+  - `docker run --name %name% %image% [command]`: crete container with name `%name%` from image `%image%`
     - `--rm`: delete container after termination
     - `-ti` : interactive terminal (tty)
     - `-v local_folder:docker_folder`: mount `local_folder` in `docker_folder`

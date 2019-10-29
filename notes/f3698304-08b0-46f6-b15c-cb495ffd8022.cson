@@ -1,0 +1,42 @@
+createdAt: "2019-09-10T09:24:49.070Z"
+updatedAt: "2019-09-10T09:24:55.113Z"
+type: "SNIPPET_NOTE"
+folder: "1a74d4b87ffb3d65d815"
+title: "deobfuscate IAT"
+tags: []
+description: "deobfuscate IAT"
+snippets: [
+  {
+    linesHighlighted: []
+    name: ""
+    content: '''
+      start = 0x02CCF008
+      end   = 0x02CCF144
+      
+      for addr in range(start, end+1, 4):
+          create_dword(addr)
+          p_code = Dword(addr)
+          create_insn(p_code)
+          
+          inst = GetDisasm(p_code).split("    ")
+          if len(inst) != 2 or inst[0] != "push":
+              print "something wrong in %x" % addr
+              exit(0)
+          
+          obf_iat_addr = int(inst[1][:-1], 16)
+          iat_addr = (~obf_iat_addr) & 0xffffffff
+          name = get_name(iat_addr)
+          
+          if name == '':
+              print "something wrong with iat in %x" % addr
+              exit(0)
+          
+          name = name[name.find("_")+1:]
+          set_name(p_code, name)
+          set_name(addr, name + "_0")
+          
+    '''
+  }
+]
+isStarred: false
+isTrashed: false

@@ -1,0 +1,23 @@
+createdAt: "2019-09-09T10:51:19.134Z"
+updatedAt: "2019-09-09T10:51:29.392Z"
+type: "SNIPPET_NOTE"
+folder: "1a74d4b87ffb3d65d815"
+title: "fix IAT names"
+tags: []
+description: "fix IAT names"
+snippets: [
+  {
+    linesHighlighted: []
+    name: ""
+    content: '''
+      start = 0xC41000
+      end   = 0xC411E0
+      
+      for addr in xrange(start, end, 4):
+          set_name(addr, GetDisasm(addr).split(" ")[-1])
+          
+    '''
+  }
+]
+isStarred: false
+isTrashed: false

@@ -1,0 +1,27 @@
+createdAt: "2019-09-03T09:02:14.445Z"
+updatedAt: "2019-09-03T09:19:48.124Z"
+type: "MARKDOWN_NOTE"
+folder: "f055e6973cea5fa24def"
+title: "Fuzzers"
+tags: []
+content: '''
+  # Fuzzers
+  #### Andrea Biondo
+  
+  ```
+  Generate Test Case -> Execute Program -> Monitor Program -> Collect Result -.
+  ^                                                                           |
+  |___________________________________________________________________________|
+  ```
+  
+  ### Input generation
+  - generation based
+  - mutation based
+  
+  ### Execution
+  - out-of-process
+  - in-process
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false

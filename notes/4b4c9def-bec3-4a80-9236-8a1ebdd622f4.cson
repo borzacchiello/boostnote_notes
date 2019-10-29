@@ -1,0 +1,26 @@
+createdAt: "2019-09-12T09:53:27.710Z"
+updatedAt: "2019-09-12T09:53:42.560Z"
+type: "SNIPPET_NOTE"
+folder: "1a74d4b87ffb3d65d815"
+title: "dump memory from IDA"
+tags: []
+description: "dump memory from IDA"
+snippets: [
+  {
+    linesHighlighted: []
+    name: "dump_mem.py"
+    mode: "Python"
+    content: '''
+      filename = AskFile(1, "*.bin", "Output file name")
+      address = 0x3940000
+      size = 0x39ef000 - 0x3940000
+      dbgr = True
+      with open(filename, "wb") as out:
+          data = GetManyBytes(address, size, use_dbg=dbgr)
+          out.write(data)
+      
+    '''
+  }
+]
+isStarred: false
+isTrashed: false

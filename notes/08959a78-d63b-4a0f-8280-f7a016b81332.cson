@@ -1,0 +1,54 @@
+createdAt: "2019-09-02T12:03:37.381Z"
+updatedAt: "2019-09-03T16:04:05.977Z"
+type: "MARKDOWN_NOTE"
+folder: "f055e6973cea5fa24def"
+title: "Malware Analysis"
+tags: []
+content: '''
+  # Malware Analysis
+  #### Davide Balzarotti
+  
+  - Abuse Benign Software
+  - Write Malicious Software (doesn't need exploitation, other attack vectors such as Spam or Legitimate Webstores)
+  
+  Malware: `A piece of Software Intentionally designed with Malicious Functionalities`
+  
+  - Software (a shellcode or a PDF is NOT a malware, in this definition)
+  - Intentionally (a vulnerable application is not a malware)
+  - Malicious (tricky, what is malicious?)
+  
+  ```
+                  .---------------.
+  .---------------|- - - - - - - -|--.
+  |               |  binary anal. |  |
+  |               | .-----------. |  |
+  |               | | mal. anal.| |  |
+  |               | |           | |  |
+  |               | |___________| |  |
+  |  prog. anal.  |_______________|  |
+  |__________________________________|
+  ```
+  
+  start of malware analysis papers in academia: ~2005
+  three main phases
+  
+  **main challenge in malware analysis**: adversarial code!
+  
+  _limitation of static analysis in malware_ (paper)
+  
+  switch from static analysis to dynamic analysis
+  
+  **nowadays**: a LOT of samples -> new constraints, new challenges but new opportunities.
+  
+  _challenges_: we do not have time. 5 minitue of analysis is too much
+  _opportunities_: overly-complicated analysis are not feasible (the early day ones considered few samples, e.g., 10)
+  
+  IDEA: mine malware submissions to find out if a malware author had submitted previous version of a malware to a sanbox until no detection were found.
+  
+  ---
+  
+  PRCTL syscall / rename argv[0] -> change name for pstree / ps
+'''
+linesHighlighted: []
+isStarred: false
+isTrashed: false
