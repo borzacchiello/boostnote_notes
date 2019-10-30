@@ -1,10 +1,10 @@
 createdAt: "2019-10-29T10:46:16.976Z"
-updatedAt: "2019-10-29T10:47:25.512Z"
+updatedAt: "2019-10-30T15:40:31.267Z"
 type: "SNIPPET_NOTE"
 folder: "4c8a94761a2196059488"
-title: "Count instructions using perf"
+title: "count instructions using perf"
 tags: []
-description: "Count instructions using perf"
+description: "count instructions using perf"
 snippets: [
   {
     linesHighlighted: []
@@ -20,6 +20,7 @@ snippets: [
       #include <asm/unistd.h>
       
       static int fd;
+      FILE* __file_stats = 0;
       
       static long
       perf_event_open(struct perf_event_attr *hw_event, pid_t pid,
@@ -46,7 +47,7 @@ snippets: [
               fprintf(stderr, 
                   "Error opening leader %llx\\n", pe.config);
               fprintf(stderr, 
-                  "execute \\"echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid\\"");
+                  "execute \\"echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid\\"\\n");
               exit(EXIT_FAILURE);
           }
       }
@@ -65,6 +66,61 @@ snippets: [
       }
       
     '''
+  }
+  {
+    name: "monitor_inst.h"
+    mode: "C"
+    content: '''
+      #ifndef MONITOR_INST
+      #define MONITOR_INST
+      
+      #include <stdio.h>
+      extern FILE* __file_stats;
+      
+      #define INIT_STATS_FILE()                               \\
+          if (EnablePerfInstructionMonitoring) {              \\
+              __file_stats = fopen(                           \\
+                  "./klee-last/insts_stats.csv", "a");        \\
+          }
+      
+      #define CLOSE_STATS_FILE()                              \\
+          if (EnablePerfInstructionMonitoring) {              \\
+              fclose(__file_stats);                           \\
+          }
+      
+      #define INIT_COUNTER()                                  \\
+          if (EnablePerfInstructionMonitoring) {              \\
+              init_count();                                   \\
+          }
+      
+      #define START_COUNTER()                                 \\
+          if (EnablePerfInstructionMonitoring) {              \\
+              start_count();                                  \\
+          }
+      
+      #define DUMP_COUNTER(uniq)                              \\
+          do {                                                \\
+              unsigned long long __count_##uniq;              \\
+              if (EnablePerfInstructionMonitoring) {          \\
+                  stop_count();                               \\
+                  read_count(&__count_##uniq);                \\
+                  fprintf(                                    \\
+                      __file_stats,                           \\
+                      "%s;%lld\\n",                            \\
+                      #uniq,                                  \\
+                      __count_##uniq);                        \\
+              }                                               \\
+          } while (0);
+      
+      void init_count();
+      void start_count();
+      void stop_count();
+      void read_count(unsigned long long* count);
+      
+      #endif
+      
+    '''
+    linesHighlighted: []
   }
 ]
 isStarred: false
